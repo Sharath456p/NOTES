@@ -1,0 +1,1615 @@
+TERRAFORM-Mastery
+
+IP Address
+Unique 32-bit logical address assigned to any device/host connected to a network on which the Internet Protocol is used as the medium for communication
+Uniquely identifies a device inside a network An IP address is the address of the layer-3 IP protocol
+The IP address identifies the source and destination networks which allow the data packet to flow accordingly in the specified route
+To find IP address, run ipconfig in Windows CMD or ifconfig or hostname -I in Linux terminal
+
+IPv4 vs IPv6
+Two versions of IP addresses: IPv4 and IPv6
+• IPv4 defines an IP address as a 32-bit number (4 bytes) and has four parts separated
+by three dots, as in: 70.74:251,42
+• Each part written in conventional Base 10 numerals and represented as eight-bit binary
+number from 0 to 255. So, IPv4 has 232 addresses
+However, the growth of the Internet lead to the depletion of available IPv4 addresses,
+and a new version of IP (IPv6) was developed
+• IPv6 defines an IP address using 128 bits (16 bytes). So, IPv6 has 2128 addresses
+IPv6 standard has 8 parts of hexadecimal numbers separated by colons, as in
+2620:cc:8000:1c82:544c:cce:f2fa:5a9b
+FFFF = 2 Bytes
+
+Public/Private/Elastic IPs in AWS
+Public IP
+Address that can be reached from the internet i.e., for communication between the internet and your
+AWS instances
+Dynamic: if you stop/start your instance you get reassigned a new public IP
+AWS has over a million public IP addresses and is constantly adding new ones
+Elastic IP
+• Elastic IPs get allocated to your account, and stay the same - it's up to you to attach them to an instance
+or not. You could say they are static public IP addresses
+We can remap the address and re-associate it with another instance in your account. You can also re-
+attach the same IP address to the same EC2 instance when it is restarted
+You get charged for them, if they're not attached to an instance
+By default, every account have a limit of 5 Elastic IP per region
+https://aws.amazon.com/premiumsupport/knowledge-center/elastic-ip-charges/
+
+Private IP
+Address that is not reachable over the internet
+Used for communication between instances in the same Virtual Private Cloud (VPC)
+Remain associated with the instance when it is stopped or rebooted, it will only disassociate once the
+instance is terminated
+
+Port Number
+There could be multiple applications running in a host and we need a
+way to uniquely identify them
+A port number helps in identify a specific process executing in the
+host
+IP addresses are implemented at the networking layer, whereas, Ports
+are implemented at the transport layer as part of the TCP or UDP
+header
+After IP delivers the packet to destination, with the help of the port
+numbers OS directs the data to the correct application by looking at
+Port number in TCP Header
+Ports are represented by 16-bit numbers. Hence ports range from 0-
+65525
+
+Ip:port —> called as socket
+
+Amazon.com:80. (redirects to htpps).  Https port 80. Https port 443
+
+DNS Server 53
+FTP Server 21
+Web Server 80
+
+Domain Name System(DNS)
+IP addresses are hard to remember
+We are better at remembering names -
+www.google.com - than numbers - 142.250.182.142
+Think of DNS like a phonebook. While a phonebook
+maps people's names to their phone numbers, the DNS
+maps computer names to IP addresses
+Every website domain has a correspording internet
+protocol (IP) address
+Mapping names to IPs is called DNS
+Machines that runs DNS are called DNS servers
+Each mapping is called a DNS record
+Uses Port 53
+https://computer.howstuffworks.com/dns.htm
+
+• DNS is all about translating
+hard-to-remember IP
+addresses into human-friendly
+domain names
+• DNS server is a directory of
+public IP addresses and their
+affiliated host names
+
+
+The process of translating IP addresses to domain name is called DNS resolution
+nslookup is a command-line tool for querying the Domain Name System (DNS) to obtain domain name or IP address mapping, or other DNS records.
+
+What is SSH?
+SSH or Secure Shell or Secure Socket Shell, is a protocol which allows us to connect securely to a
+remote computer over an unsecured network
+The ssh command is used from logging into the remote machine, transferring files between the two
+machines, and for executing commands on the remote machine
+SSH provides password or public-key based authentication and encrypts connections between
+two network endpoints
+It is a secure alternative to legacy login protocols (such as telnet, rlogin) and insecure file transfer
+methods (such as FTP)
+
+Security Groups: rules
+Rules of a security group are defined in two tables: Inbound and Outbound
+By default, All inbound traffic is blocked (except for SSH) and outbound traffic is
+allowed
+• If your application is not accessible, Security group configuration should be the first
+place to look into
+Any rule added to explicitly allow traffic into an EC2 instance, will automatically allow
+responses to pass back out to the sender without an explicit rule in the Outbound rules
+Each rule is comprised of five fields: Type, Protocol, Port Range, Source, and
+Description. This applies to both Inbound and Outbound rules.
+
+Security Groups: rules
+Type: Common protocols like SSH, RDP, or HTTP. You can also choose custom protocols
+Protocol: Auto filled when Type is selected. However, if you create a custom rule, you can
+specify your protocol (TCP/UDP, etc.)
+Port Range: Auto filled for the chosen protocol. However, custom ports can also be used
+Source: This can be a network subnet range, a specific IP address, or another AWS security
+group. You can also leave access open to the entire internet using the "Anywhere (0.0.0.0/0)"
+value
+Description: This field allows you to add a description for the rule that has been added
+
+metadata= data of a data
+Connecting to EC2 Instance
+Using Putty(https://www.putty.org/) SSH Client
+Using MobaXterm(https://mobaxterm.mobatek.net/download-home-edition.html)
+EC2 Instance Connect, which is connecting from the browser itself
+VS Code's Remote - SSH plugin https://code.visualstudio.com/docs/remote/ssh
+
+Bydefault SSH runs on Runs on Port 22. It's a standard port but can be configured to use a different port and
+most organizations do for security reasons
+
+Password authentication
+In conventional password authentication, we connect to remote machines using
+password
+A con of password authentication is that usernames and passwords have to be directly
+transmitted to the server being logged into, thus making this method more prone to
+hacking
+Passwords are generally, predictably, unavoidably weak
+Can be disabled in the SSH configuration
+ssh ‹user-name>@<ip-address-of-host>
+ssh  ec2-user@43.204.112.62 it will look the password from standard location
+ssh -i weekend-devops.pem ec2-user@43.204.112.62
+
+
+
+Terraform IAM Services: 09-video
+Principle of least privilege
+The Principle of Least Privilege states that a subject should
+be given only those privileges needed for it to complete its
+task.
+If a subject does not need an access right, the subject should
+not have that right.
+• Granting permissions to a user beyond the scope of the
+necessary rights of an action can allow that user to obtain or
+change information in unwanted ways. This could potentially
+damage the system.
+Careful delegation of access rights can also limit attackers
+from damaging a system.
+Every program and every user of the system should operate
+using the least set of privileges necessary to complete the job.
+
+IAM is all about what a user or a bot can do in your AWS account
+IAM controls Who (authentication) can do What (authorization) in your AWS account.
+Authentication with IAM is done with users/groups and roles.
+Authorization is done by policies.
+
+• IAM stands for Identity and Access Management.
+• It is the core of AWS security as it enables you to create users and groups, grant specific permissions
+and policies to specific users, manage root access keys, set up MFA multi-factor authentication for
+added security, and so much more.
+• You can specify permissions to control which operations a user or role can perform on AWS resources
+• It is free to use!
+
+Identities : user/roles/groups/cred
+Permissions:policies attached to user/roles/groups
+
+IAM USERS
+• IAM users can be an individual, system, or application requiring access to AWS services.
+• With IAM, you can securely manage access to AWS services by creating an IAM user for
+each employee in your organization.
+• Each user account consists of a unique name and security credentials such as a password,
+access key, secret access key, and/or multi-factor authentication (MFA).
+• Each IAM user is associated with only one AWS account.
+• IAM users need passwords when they access the AWS Management Console.
+• They would need access key and secret access key for Programmatic access.
+
+IAM GROUPS
+• IAM Group is a collection of IAM users
+• You can use IAM groups to specify permissions for multiple users so that any permissions
+applied to the group are applied to the individual users in that group as well.
+• Managing groups is quite easy.
+• If you add another user to the group, the new user will automatically inherit all the
+policies and the permissions already assigned to that group. This lessens the
+administrative burden.
+• Groups can't be nested; they can contain only users, not other groups.
+
+IAM POLICIES
+When you create a user in IAM, that user doesn't necessarily have access to any
+resources. In fact, the default is to not assign any permissions to that user
+• IAM policies define access control and permissions of various AWS resources.
+• It specifies who has access to the resources and what actions they can perform.
+• Policies are stored in AWS as JSON documents.
+• IAM policies can be attached to a user or a group.
+• For example, a policy could allow an IAM user to access one of the buckets
+in Amazon S3, or Full access to EC2 service.
+
+IAM ROLE
+• Imagine you have an application running on an EC2 instance in AWS.
+• That application needs to occasionally write some information to an S3 bucket, but
+requires credentials to do so.
+• In this scenario, you could place the credentials on the EC2 instance, but this isn't that
+secure and these credentials need to be revoked if not required.
+• A better solution in this case is to use Roles.
+
+• An IAM role is an IAM identity that you can create in your account that has specific
+permissions.
+• An IAM role is also like a user and it will have its own set of permissions.
+• You can authorize roles to be assumed by humans, Amazon EC2 instances, custom code,
+or other AWS services for specific access to services.
+• An IAM user has permanent long-term credentials and is used to directly interact with
+AWS services.
+• Roles do not have credentials such as a password or access keys associated with it,
+instead, when you assume a role, such as IAM users, applications, or an AWS service such
+as EC2, it provides you with temporary security credentials for your role session.
+• Roles are not permissions
+• Role permissions are temporary credentials.
+
+AWS Access Types
+• When we create a user in AWS, we have an option to select the access type
+• Programmatic Access
+• AWS Management Console Access
+• AWS Management Console is a web application that allows us to
+manage AWS resources for particular AWS accounts from the UI
+• Programmatic Access allows you to manage AWS resources from
+CLI tools and from various programs written in Go, Python etc
+• For Programmatic access, you would need access key ID and
+secret access key to be used with AWS API, CLI, SDK, and other
+
+AWS CLI
+• A command line tool for working with AWS services, including Amazon EKS
+Makes it easier to manage AWS resources rather than managing through console
+• Few commands can create your whole infrastructure
+• After installing the AWS CLI, we also need to configure it to talk to our AWS services
+• You also need an IAM user with Programmatic Access.
+
+Protecting AWS Account
+• We need to ensure the security of our AWS resources by careful control over who has
+access to them.
+• Your AWS root account has unrestricted access to all your AWS resources.
+• For this reason, AWS always recommends that you create individual IAM users, then
+grant each user permissions based on their assigned tasks.
+• To more easily manage the permissions of multiple IAM users, you should assign users
+with the same permissions to an IAM group.
+• Programmatic access allows you to invoke actions on your AWS resources(CRUD) either
+through an application that you write or through a third-party tool including aws cli
+• Programmatic access can be quite powerful, so implementing best practices to protect
+access key IDs and secret access keys is important in order to prevent accidental or
+malicious account activity.
+• Your root account should always be protected by Multi-Factor Authentication (MFA).
+This additional layer of security helps protect against unauthorized logins to your
+account
+
+Prerequisites to use the AWS CLI
+• IAM Account (No root account for security reasons)
+• Once configured, aws cli creates two configuration files, config and credentials, under
+aws folder in user home directory
+
+aws ec2-describe-instance --output text                 
+aws ec2-describe-instance --output yaml
+aws ec2-describe-instance --output json
+aws ec2-describe-instance --output table
+
+
+Terraform Configuration Language - 10th video
+
+• The main purpose of the Terraform language is declaring resources, which represent
+infrastructure objects.
+• The language is declarative, describing an intended goal rather than the steps to reach that goal.
+• Configuration files you write in Terraform language tell Terraform what plugins to install, what
+infrastructure to create, and what data to fetch.
+• All terraform configuration files end with .tf extension
+
+HCL syntax comprises blocks which are containers for
+other content and usually represent the configuration of a
+resource.
+Blocks have a block type, can have zero or more labels,
+and have a body that contains any number of arguments
+and nested blocks.
+• Arguments are key = value pairs. Terraform accepts
+values of type string, number, boolean, map, and list.
+Values can be provided directly or by referencing and
+combining other values.
+Single line comments start with #, while multi-line
+comments use an opening /* and a closing */.
+
+
+
+Block types
+1. Terraform Block
+2. Provider Block
+3. Resource Block
+4.Input Variables Block
+5. Output Values Block
+6. Data Sources Block
+7. Modules Block
+8. Local Values Block
+
+
+
+Argument Reference vs Attribute Reference
+Argument reference and attribute reference are terms used to describe how you interact with resources,
+modules, and data sources within your Terraform configurations.
+An argument reference is used to provide values for the configuration settings of a resource or module.
+These are typically defined as input variables in the resource or module's configuration.
+For example, consider a Terraform resource that creates an AWS EC2 instance:
+
+In this example, ami, instance_type, and subnet_id are input
+variables of the aws_instance resource. The values for
+these variables are provided using argument references
+(ami = "ami-12345678", etc.).
+
+
+
+Terraform workflow consists of 3 stages:
+• Write: Define infrastructure in configuration
+files. For example, configuration to deploy
+virtual machines with security groups and a load
+balancer.
+• Plan: Terraform creates an execution plan
+describing the infrastructure it will create,
+update, or destroy based on the configuration.
+It is just a dry-run to Preview changes before
+applying.
+• Apply: On approval, Terraform provisions the
+infrastructure from the terraform configuration
+files.
+
+Terraform CLI offers a variety of commands for managing
+infrastructure resources.
+• To view every terraform command available, you can simply ri
+terraform or terraform -h.
+• Below are some basic commands:
+• terraform init
+terraform fmt
+terraform validate
+terraform plan
+terraform apply
+terraform destroy
+terraform show
+
+
+
+Terraform Init
+First command to be run for new & modified configurations
+Initialize the working directory containing terraform files
+Downloads the provider plugins that are required by the configuration.
+Downloading any modules that are referenced by the configuration.
+It initializes the backend configuration, which defines where Terraform stores its state file.
+Creating a lock file that records the exact versions of the providers and modules that are installed.
+Creates a hidden directory called. .terraform where it installs the providers and terraform
+modules.
+
+
+Terraform validate
+Used to validate the syntax and configuration of your Terraform files without deploying or
+modifying any infrastructure.
+Can catch errors and potential issues in your Terraform code before you apply any changes to your
+infrastructure.
+
+Terraform Fmt
+Used to format Terraform configuration files in a standardized and consistent manner.
+Formatting can greatly affect readability and maintainability of the code.
+
+Terraform Plan
+Used to preview the changes that will be made to your infrastructure based on the current state of your configuration files.
+• It's basically a dry run.
+It analyses your code and compares it against the existing state of your infrastructure (stored in the Terraform state file).
+Gives a detailed execution plan that shows what resources will be created, modified, or deleted when you apply your configuration.
+
+Terraform Apply
+Used to apply the changes defined in your configuration files to your infrastructure.
+It takes the changes specified in your Terraform files, compares them against the current state of
+your infrastructure, and then makes the necessary updates, additions, and deletions to bring your
+infrastructure in line with the desired state.
+Then you wil get a prompt to a ept he changes. You ed to enter yes for terraform to apply the
+changes.
+• You can also use terraform apply -auto-approve option to skip the prompt which is helpful in CI/CD pipelines.
+It updates the Terraform state file to reflect the new state of your infrastructure.
+In case if output block is defined in the configuration, its values are displayed after the changes are
+applied.
+
+Terraform Show
+
+The terraform show command shows the
+attributes and properties of the resources that
+have been created or modified by Terraform, along
+with their current values.
+This output is read from the state file.
+This can help you verify that your infrastructure is in
+the expected state and provide insights into the
+current configuration of your resources.
+Machine-readable JSON output can be generated
+by adding the -json command-line flag.
+
+Terraform Destroy
+Used to tear down and delete the resources that were created by the configuration
+When you run terraform destroy, terraform will:
+Lock your project's state, so that no other instances of Terraform will attempt to modify your
+state or apply changes to your resources.
+Create a plan to destroy all remote objects and wait for you to approve it.
+Once approved, the infrastructure will be destroyed, and state file will be updated with the new
+state of the resources.
+
+aws configure --profile <PROFILE_NAME>
+
+If we just use provider block and not using terraform settings block by default it is going to download the latest plugin
+
+If we do terraform destroy it will create terraform.tfstate.backup file  which contains the state file of deleted infra and terraform.tfstate has nothing in it.
+
+Idempotency
+• Idempotency means no matter how many times you run your laC and, what your starting state is, you will end*
+up with the same end state
+• If the desired state is already achieved, the system will not change the configuration even after running the
+laC code again
+
+Version constraints
+• Version constraints are used to specify the acceptable range of versions for a particular provider or
+module.
+• Version constraints help you control the versions of providers and modules that your configuration
+uses, ensuring compatibility and stability.
+• They are defined using a combination of operators and version numbers.
+• If Terraform doesn't have an acceptable version of a required plugin or module, it will attempt to
+download the newest version that meets the applicable constraints.
+Exact Version Constraint
+You can specify an exact version for a provider or module using the = operator
+
+
+Version Range Constraints
+You can specify a range of versions using various operators.
+• != Excludes an exact version number.
+• >= Greater than or equal to a specified version.
+• ‹= Less than or equal to a specified version.
+• > Greater than a specified version.
+• ‹ Less than a specified version.
+• ~› only the rightmost version component to increment.
+For example: ~> 5.13.0 will allow installation of 5.13.1
+but not 5.14.0
+
+
+• HashiCorp actively develops and maintains Terraform
+• To access new Terraform features you need to upgrade the CLI to its latest version
+• Set the required_version to control the version of Terraform that your configurations use and make
+updates more predictable.
+• You might need to do this to maintain compatibility with your existing infrastructure code or to leverage new
+features available in newer versions.
+
+
+• Terraform Block: In your . tf files, use the required version block to specify the required Terraform
+version. This ensures that only the specified version is used to apply the configuration.
+• Pin Versions: Always specify explicit version constraints for both provider plugins and Terraform itself. Avoid
+using floating version constraints like ~>, which can lead to unexpected updates. Instead, use exact version
+numbers or more specific constraints to ensure compatibility and stability. Do not use the latest release in the
+production environment, to avoid having to deal with bugs or issues in latest release. In dev environment,
+always play with the latest release so you could experiment new feature and worry less if things break.
+• Version Locking: Version locking helps you maintain consistency and predictability in your infrastructure
+deployments. For more critical environments like production, consider locking the versions of Terraform and
+providers. When you initialize a Terraform configuration for the first time with Terraform 1.1 or later, Terraform
+will generate a new . terraform.lock.hcl file in the current working directory. You should include the lock
+file in your version control repository to ensure that Terraform uses the same provider versions across your
+team.
+• Update with Caution: When upgrading Terraform or provider versions, do so in a controlled manner. Test the
+updated configuration in a non-production environment first to identify and address any compatible
+
+Multiple Provider Configurations
+• You can optionally define multiple configurations for the same
+provider and select which one to use on a per-resource or per-
+module basis.
+• The primary reason for this is to support multiple regions for a cloud
+platform; other examples include targeting multiple Docker hosts, multiple Consul hosts, etc.
+• To create multiple configurations for a given provider, include multiple provider blocks with the same provider's name.
+• For each additional non-default configuration, use the alias meta-argument to provide an extra name segment.
+• When Terraform needs the name of a provider configuration, it expects a reference of the form < PROVIDER NAME>. ‹ALIAS>
+
+Providers: Random & Loca lInterpolation and Cross-referencing attributes
+
+Local Provider
+• Used to manage local resources, such as creating files.
+
+Random Provider
+• The random provider allows the use of randomness within Terraform
+configurations.
+• This is a logical provider, which means that it works entirely within Terraform's logic,
+and doesn't interact with any other services.
+• For example, the resource random_pet generates random pet names that are
+intended to be used as unique identifiers for other resources.
+
+Cross Referencing Resource Attributes
+• The most common reference type is a reference to an attribute of a resource which has been declared
+either with a resource or data block
+
+String interpolation:
+Name= "web-server-${random_pet. server_name. id}”
+
+
+Hardcoded Arguments
+Hard coding Terraform variables, while it may seem convenient at first, can
+lead to several disadvantages and issues as your infrastructure and project
+scale. Here are some of the main disadvantages:
+1. Lack of Flexibility: Hard coding variables makes it difficult to adapt to
+changes in your infrastructure requirements. If a value needs to be
+changed, you must modify the code directly, potentially leading to errors
+and increased maintenance overhead.
+2. Reduced Reusability: Hard coding variables limits the reusability of your
+Terraform modules. Modules should ideally be designed to be flexible and
+reusable across different projects, but hard-coded values make them less
+adaptable.
+3.Security Risks: Sensitive data, such as API keys or passwords, should
+never be hard coded directly in your Terraform configuration files. Storing
+sensitive information in code exposes it to potential security risks if the
+code is accidentally shared or exposed.
+4. Maintenance Challenges: As your infrastructure grows and evolves, hard-
+coded values can quickly become outdated and require constant manual
+updates. This increases the risk of configuration drift and introduces
+potential errors.
+
+
+Input Variables
+• Input variables are a way to parameterize your configuration files so that you can customise and pass values easy
+into your Terraform modules and configurations.
+• Input variables allow you to make your Terraform code more flexible, reusable, and adaptable to different
+environments or use cases.
+Input variables are typically defined in separate variable files (e.g., variables.tf) to keep your code
+organized and modular, but terraform loads all files ending in . tf, so you can also define variables in files
+with other names.
+• A variable is defined by using a variable block with a label. The label is the name of the variable and must be
+unique among all the variables in the same configuration.
+• The name of a variable can be any valid identifier except the following: source, version, providers, count,
+for_each, lifecycle, depends_on, locals.
+We can use variables to hide secrets/ confidential data.
+• Terraform accepts variables of type string, number, boolean, list, set, map, object, and tuple. If a
+variable type is not explicitly defined, Terraform defaults to type string.
+
+
+Terraform CLI defines the following optional arguments for variable declarations:
+• default - If present, the variable is optional, and the default value will be used if no value is set when calling the
+module or running Terraform
+• type - This argument specifies what value types are accepted for the variable.
+• description - This specifies the input variable's documentation.
+• validation - A block to define validation rules, usually in addition to type constraints.
+• sensitive - Setting a variable as sensitive prevents Terraform from showing its value in the plan or apply output.
+Terraform will still record sensitive values in the state, and so anyone who can access the state data will have access
+to the sensitive values in cleartext.
+nullable - Controls whether the module caller may assign the value null to the variable.
+
+Sensitive data in state file
+• Setting a variable as sensitive prevents Terraform from showing its value in the plan or apply output.
+• Terraform will still record sensitive values in the state, and so anyone who can access the state data will have
+access to the sensitive values in cleartext.
+• If you manage any sensitive data with Terraform (like database passwords, user passwords, or private keys),
+treat the state itself as sensitive data.
+• Storing state remotely can provide better security.
+• As of Terraform 0.9, Terraform does not persist state to the local disk when remote state is in use, and
+some backends can be configured to encrypt the state data at rest. Example: Terraform Cloud & AWS S3
+Backend
+
+Referencing Variables
+• You can use input variables throughout your Terraform code by referencing them using the var keyword.
+• You can call existing input variables in the configuration file using Terraform's interpolation syntax.
+• If a variable value is not provided in any of the ways, and the variable is called in a resource configuration,
+Terraform prompts you for the value when you run terraform apply.
+
+Supplying Variable Values
+1.Variable Defaults
+2. Command line Flags
+3. File based variables
+4. Environment variables
+terraform console (it opens the session where you can see for var.variable name you will get the result which bacsically read the details from state file)
+
+terraform init —upgrade
+
+Command line Flags
+• To specify individual variables on the command line, use the -var option when running the terraform plan
+and terraform apply commands:
+terraform apply -var="image_id=ami-abc123" -var="instance_type=t2.micro"
+terraform apply -var='image_id_List=["ami-abc123", "ami-def456" ]'
+terraform apply -var='image_id_map={"us-east-1": "ami-abc123", "us-east-2" : "ami-def456" } '
+
+For destroy also we need to provide the var
+
+File based variables
+• Variable values can be provided through a separate file named terraform. tvfars or
+terraform. tfvars. json or any file ending with . auto. tfvars or .auto.tfvars. json
+
+• You can also load variable files with different names using the -var-file flag when running terraform
+apply or terraform plan
+
+terraform apply -var-file=variables.tfvars
+
+
+Environment variables
+• You define a Terraform environment variable by giving it a name in the following format:
+TF_VAR_name, where name refers to the environment variable.
+• In Unix-based systems, you can define environment variables in the terminal using the export command:
+export TF_VAR_region=us-west-2
+• In Windows, you define environment variables in the command prompt using this command:
+set TF_VAR_region=us-west-2
+
+
+Variable Definition Precedence
+• If the same variable is assigned multiple values in various places, Terraform uses the last value it finds,
+overriding any previous values.
+• Terraform loads variables in the following order, with later sources taking precedence over earlier ones:
+• Environment variables
+• The terraform.tfvars file, if present.
+• The terraform.tfvars.json file, if present.
+• Any *.auto.tfvars or *.auto.tfvars.json files, processed in lexical order of their filenames.
+• Any -var and -var-file options on the command line, in the order they are provided.
+
+Terraform Console
+The terraform console command is a part of the Terraform CLI
+• The terraform console command provides an interactive command-line console for evaluating and
+experimenting with expressions.
+• You can use it to test interpolations before using them in configurations and to interact with any values
+currently saved in state.
+• The console holds a lock on the state, and you will not be able to use the console while performing other
+actions that modify state.
+• To close the console, enter the exit command or press Control-C or Control-D.
+
+Local Variables
+• Local variables are like temporary local variables defined within functions of programming languages.
+• They mainly serve the purpose of reducing duplication of values within the Terraform code and to improve
+the organization and maintainability of your configuration files.
+• They are only accessible within the module/configuration where they are declared.
+• Local variables are evaluated once during the Terraform plan phase, so they are not meant for dynamic
+runtime changes like variables.
+• You cannot set these from an input nor can be defined in .tfvars file.
+• A set of related local values can be declared together in a single locals block. They can be referenced as
+local. <NAME>
+• You can also define locals separately in a file called locals. tf
+
+Output Values
+• Output values are like return values in programming languages.
+Used to display required data about the resources once they are deployed(Ex: Public IP of an EC2 Instance)
+• Each output value exported by a module must be declared using an output block
+• All outputs can also be separate declared in a file called outputs. tf
+• This can be useful just to output valuable information or to feed information to external software
+
+
+Output Values: Optional Arguments
+• output blocks can optionally include description, sensitive, and depends_on arguments
+• description: Because the output values are part of its user interface, you can briefly describe the
+purpose of each value using the optional description argument
+• sensitive: An output can be marked as sensitive to hide its output from displaying during
+terraform plan and terraform apply. Terraform will still record sensitive values in the state, and so
+anvone who can access the state data will have access to the sensitive values in cleartext
+
+RDS instance creation Dbeaver is a software used to connect to DB
+
+Terraform Data types
+Terraform supports various data types that are used for defining and manipulating values in your infrastructure
+code, for example:
+Primitive Types (simple type that isn't made from any other types)
+1.
+Numbers: Represents numeric values, including integers and floating-point numbers
+Strings: Represents a sequence of characters
+3.
+Bool: Represents boolean values, either true or false. Used for conditional logic
+Complex/Collection Types (groups multiple values into a single value)
+Lists: Répresents an ordered collection of values of same datatype
+Maps: Represents a collection of key-value pairs
+3.
+Set: Represents an unordered collection of unique values
+Structural Types (multiple values of distinct types to be grouped together as a single value)
+1.
+Tuple: Represents an ordered collection of values of different datatype
+2.
+Object: Represents a complex data structure
+
+
+Type function
+
+type returns the type of a given value.
+terraform console
+type(var.instancetype)
+
+type ([1, "vikram"])
+Its a tuple
+
+Conversion of Primitive Types
+
+The Terraform language will automatically convert number and bool values to string values when needed,
+and vice-versa if the string contains a valid representation of a number or boolean value.
+1.true converts to "true", and vice-versa
+2.false converts to "false", and vice-versa
+3.15 converts to "15" , and vice-versa
+
+variable "mixed_types" {.  When you have use case like this list should be of same datatype terraform implicitly convert 42 and true to string because terraform default datatype is string)
+  type= list( any)
+  default = l"apple", 42, truel
+}
+
+
+Data type: String
+Strings are a sequence of characters enclosed in double quotes.
+Strings are used to represent text-based values like resource names, labels, and descriptions.
+Strings can be combined using string concatenation to create more complex values.Data type: String
+Strings are a sequence of characters enclosed in double quotes.
+Strings are used to represent text-based values like resource names, labels, and descriptions.
+Strings can be combined using string concatenation to create more complex values.
+
+
+tostring Function
+Explicit type conversions are rarely necessary in Terraform because it will convert types automatical yac
+where required.
+• Use the explicit type conversion functions only to normalize types returned in module outputs.  tostring(1) = “1”
+
+
+tonumber Function
+> tonumber(" no")
+Error: Invalid function argument
+Invalid value for "v" parameter: cannot convert "no" to number:
+string must be a decimal representation of a number.
+
+
+
+Meta-Arguments are special arguments that can be used
+within a resource block to control and influence how
+Terraform manages and interacts with the resource.
+Example: depends_on, count, for_each, provider, lifecycle
+
+
+
+Count Meta-Argument
+
+By default, a resource block configures one real infrastructure object.
+• However, sometimes you want to manage several similar objects without writing a separate block for each
+one. Terraform has two ways to do this: count and for_each.
+• The count parameter is used to create multiple instances of a resource based on a numeric value or a list
+of values.
+It allows you to define how many instances of a resource should be created, and it can be useful in
+scenarios where you need to provision multiple identical resources, such as virtual machines, storage
+containers, or network components.
+• Count argument always takes a whole number.
+
+Using count.index
+The count. index is a special variable that is automatically generated when you use the count argument
+with a resource block or a module block.
+It represents the current index of the resource being created or processed within the count loop.
+This variable is commonly used to customize resource configurations for each instance when creating
+multiple resources using the count parameter.
+
+In this example, when creating 2 AWS EC2 instances,
+count.index dynamically generate the Name tag for each                  if it is a lis [ 12,44,55,66 ].  12-oth index 44-1st index position
+instance.
+As a result, the instances will be tagged as webserver-0,
+webserver-1 based on their index within the count loop.
+
+
+You can use count. index to achieve various tasks when creating multiple instances of a resource, such as:
+1.Generating unique resource names or identifiers.
+2.Specifying different configurations or attributes for each instance based on its index.
+3. Calculating values or making decisions based on the index.
+
+output "instance_ips" {
+  value = aws_instance. web[*]. public_ip
+}
+
+
+Data type: Boolean
+Represents boolean values, either true or false.
+Bool values can be used in conditional logic.
+
+
+Conditional Expressions
+• A conditional expression uses the value of a boolean expression to select one of two values.
+Syntax:
+condition ? true_val : false_val
+If condition is true, then the result is true_val. If condition is false then the result is false_val
+• A common use of conditional expressions is to define defaults to replace invalid values:
+var.a != ""? var.a: "default-a"
+If var. a is an empty string then the result is default-a, but otherwise it is the actual value of var. a
+
+
+
+Datatype: List
+List is a complex type is a type that groups multiple values of same datatype and are ordered 
+• Complex types are represented by type constructors, but several of them also have shorthand keyword
+versions
+• There are two categories of complex types: collection types (for grouping similar values aka List), and
+structural types (for grouping dissimilar values aka Maps)
+• The type of values within a list can be strings, numbers, objects etc
+• List(string)
+• List(number)
+• List(object ({key = value}))
+• List(any)
+
+
+Element Function
+
+The element function retrieves a single element from a list
+The index is zero-based.
+This function produces an error if used with an empty list. The index must be a non-negative integer.
+Syntax:
+element (list, index)
+
+If the given index is greater than the length of the list,
+then the index is "wrapped around" by taking the index
+modulo the length of the list.
+To get the last element from the list use length to find
+the size of the list and minus 1 as the list is zero-based.
+
+> element(I "a", "b", "c"], 0)
+> element(["a", "b", "c"], 1)
+"b"
+> element(I "a", "b", "c"], 2)
+> element(I"a", "b", "c"], 5)
+"C"
+> element(I "a", "b", "c"], 9)
+“a”
+> element(["a", "b", "c"], length(["a", "b", "c"])-1)
+" c"
+
+
+A set is an unordered collection of unique values. You cannot access the set values with index.v
+Sets are often used when you need to ensure that a collection of values does not contain duplicates.
+The type of values within a set can be strings, numbers or mixed
+• Set(string)
+• Set (number)
+• Set(any)
+
+
+tolist Function
+
+Pass a set value to tolist to convert it to a list.
+Since set elements are not ordered, the resulting list will have an undefined order that will be consistent
+within a particular run of Terraform.
+
+tolist([ "a","b","c"])
+[
+" a",
+"b",
+"c",
+]
+
+A set is an unordered collection of unique values.
+You cannot access the set values with index.
+• To access individual elements of a set, it should be
+converted to a list
+
+// set of Strings
+variable "instance_types" {
+type = set(string)
+default = ["t2.micro", "t2. small", "t2.medium"]
+}
+// set of Numbers
+variable "numbers" {
+type= set(number)
+default = [1, 2, 3, 4, 5]
+}
+// set of Mixed Types
+variable "mixed_types" {
+type = set(any)
+default = ["apple", 42, true]
+}
+// Outputs
+output "instance_type" {
+value = var. instance_types
+}
+output "mixed_types" {
+value = tolist(var.mixed_types) [0]
+}
+
+Data type: Tuple
+• The tuple data type is an ordered, fixed-length collection of
+values.
+• Unlike lists, tuples have a defined length, and each element can
+have a different data type.
+•
+Tuples are useful when you need to group a set of values
+together while maintaining their specific data types and
+position in the collection.
+
+//
+Basic Tuple
+variable "person" {
+type = tuple( [string, number])
+default = ["Alice", 301]
+}
+// Tuple with Mixed Data Types
+variable "configuration"
+type = tuplel Istring,
+number,
+default = ["example.com",
+booll)
+8080, true]
+}
+Nested Tuple
+variable "location" {
+type
+= tuple( [string, tuple [number, number])])
+default = ["Office", [40.7128, -74.0060]]
+}
+//
+List of Tuples
+variable "people" {
+type = list(tuple( [string, number]))
+default = [
+[ "Alice", 301,
+[ "Bob", 25]
+
+
+Data type: Map
+Represents a collection of key-value pairs, where the keys are strings, and the values can be of various Eas
+data types.
+• Maps are used to store data in a structured manner, where each key is unique, and you can retrieve values
+based on those keys
+• The type of values within a set can be strings, numbers, booleans, mixed or objects
+strings
+• Map(string)
+• Map (number)
+• Map(object)
+• Map (any)
+
+
+Lookup Function
+The lookup function retrieves the value of a single element from a map, given its key
+If the given key does not exist, the given default value is returned instead.
+Syntax:
+lookup (map, key, default)
+
+
+Data type: Object
+• The object data type represents a structured data type that consists of multiple attributes, each with its
+own data type.
+You can think of an object as a dictionary or a map where you define keys (attribute names) and their
+corresponding values (attribute data types).
+• The schema for object types is { <KEY> = <TYPE>, <KEY> = <TYPE›, •••
+
+
+Common IaC Tools
+
+Terraform is just one of many tools and approaches available for provisioning and managing
+infrastructure. There are other tools like CloudFormation, AWS CDK (Cloud Development Kit), Azure
+Resource Manager (ARM) Templates, Google Cloud Deployment Manager that can manage the
+infrastructure as well.
+In fact, configuration management tools like Ansible, Chef, and Puppet can indeed handle some level of
+infrastructure provisioning, although their primary focus is on configuration management and automation
+of software deployment.
+Infrastructure can also be provisioned through Cloud SDKs, CLIs and through management console (Ul).
+How do we use already existing resources created outside of
+terraform configuration?
+Ex: A VPC created from the management console
+
+
+Data Sources
+• In Terraform, data sources are used to retrieve information from external sources and make it available for
+use within your infrastructure code. Ex: a security group/key pair created from the console, latest AMI ID
+depending upon the region etc
+• Data sources are defined using the data block in the Terraform configuration files.
+
+• Use this data sources to get the access to the effective Account ID, User ID, and ARN in which Terraform is
+authorized.
+
+data "aws_caller_identity" "current" {}
+
+output "account_id" {
+  value = data.aws_caller_identity.current.account_id
+}
+
+Aws key pair is nothing but public key and private key
+Using terraform you can generate a key pair using ssh-keygen. (ssh-keygen -f mykey) this will generate private and public key we can create a key pair providing public key content 
+
+resource "aws_key_pair" "test" {
+  key_name   = "deployer-key"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC65DPq9tYIW7jCOV6G@CDmb@AfcWyZAZ9ohv0puNAXXnDv]HVxs40rEOS3"
+}
+
+resource "aws_instance" "web" {
+  ami           = "ami-03abeaae9938858"  # Update the AMI ID to a valid value
+  instance_type = "t2.micro"
+  key_name      = aws_key_pair.test.key_name
+}
+
+Filters in Data Sources
+• The filter function is used with data sources when you
+need to filter the results returned by a data source based
+on specific criteria.
+• Data sources retrieve information from external sources
+(e.g., cloud providers) and allow you to use that data in
+your Terraform configuration.
+• The filter function helps you refine and manipulate the
+data obtained from these sources.
+
+
+Filters in Data Sources
+• The filter function is used with data sources when you
+need to filter the results returned by a data source based
+on specific criteria.
+• Data sources retrieve information from external sources
+(e.g., cloud providers) and allow you to use that data in
+your Terraform configuration.
+• The filter function helps you refine and manipulate the
+data obtained from these sources.
+
+Use of depends_on meta-argument
+• The depends_on meta-argument is used to define explicit
+dependencies between resources.
+• It is a way to specify that one resource depends on another,
+ensuring that Terraform creates or updates resources in the
+correct order based on these dependencies.
+
+resource "aws_instance" "web" {
+  ami           = "ami-03a6eaae9938c858c"
+  instance_type = "t2.micro"
+  
+  tags = {
+    Name = "webserver"
+  }
+}
+
+data "aws_instances" "filtered_instance" {
+  filter {
+    name   = "tag:Name"
+    values = ["webserver"]
+  }
+}
+
+
+Data Source: aws_ami
+• Use this data source to get the ID of a registered AMl for use in other resources.
+
+Use of most_recent
+• If more or less than a single match is returned by the filter search,
+Terraform will fail.
+• Ensure that your search is specific enough to return a single AMI ID only
+or use most_recent to choose the most recent one.
+
+data "aws_ami" "amazon_linux" {
+  most_recent = true
+  owners      = ["amazon"]
+
+  filter {
+    name   = "name"
+    values = ["*ami-2023*"]
+  }
+
+  filter {
+    name   = "root-device-type"
+    values = ["ebs"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+}
+
+output "filtered_ami" {
+  value = data.aws_ami.amazon_linux.id
+}
+
+
+AWS Security Groups
+• In AWS, a security group acts as a virtual firewall for Amazon EC2 instances and other AWS resources.
+• Security groups control inbound and outbound traffic to and from these resources based on a set of rules
+you define.
+• When you create a VPC, it comes with a default security group. You can create additional security groups for
+each VPC.
+• There is no additional charge for using security groups.
+• Region scoped.
+
+
+Here are some key points to understand about AWS security groups:
+• Stateful: Security groups are stateful, which means if you allow inbound traffic from a specific IP
+address or range, the corresponding outbound traffic is automatically allowed. You don't need to create
+separate rules for inbound and outbound traffic; AWS handles this for you.
+• Instance-Level: Security groups are associated with EC2 instances at launch time. You can assign one
+or more security groups to each EC2 instance. When you change the rules in a security group, those
+changes apply immediately to all instances associated with that group.
+• Rule-Based: Each security group consists of a set of inbound and outbound rules that you define. For
+example, you can create a rule to allow SSH access (port 22) only from a specific IP address range.
+• Default Security Group: Every VPC (Virtual Private Cloud) comes with a default security group that
+allows all outbound traffic and denies all inbound traffic. You can modify the rules of the default security
+group or create custom security groups as needed.
+• Rules Evaluation: When multiple security groups are associated with an instance, AWS evaluates the
+rules to determine whether to allow or deny traffic. If any security group allows the traffic, it is permitted;
+otherwise, it is denied.
+• Stateless ACLs: Security groups are different from network access control lists (NACLs), which are
+stateless and operate at the subnet level. NACLs allow you to control traffic at the subnet level!
+IP addresses and port ranges.
+
+• Each Availability Zone has a public subnet for web servers and
+a private subnet for database servers.
+• There are separate security groups for the load balancer, the
+web servers, and the database servers.
+• You can add rules to the security group for the load balancer
+to allow HTTP and HTTPS traffic from the internet.
+• You can add rules to the security group for the web servers to
+allow traffic only from the load balancer.
+• You can add rules to the security group for the database
+servers to allow only database requests from the web servers.
+
+Security group
+Operates at the instance level
+Applies to an instance only if it
+is associated with the instance
+Supports allow rules only
+Evaluates all rules before
+deciding whether to allow
+traffic
+Stateful: Return traffic is
+allowed, regardless of the rules
+
+Network ACL
+Operates at the subnet level
+Applies to all instances deployed in the associated subnet
+(providing an additional layer of defense if security group rules
+are too permissive)
+Supports allow rules and deny rules
+Evaluates rules in order, starting with the lowest numbered
+rule, when deciding whether to allow traffic
+Stateless: Return traffic must be explicitly allowed by the rules
+
+By default through console if we create  a security group the outbound rule will sent to all(public internet) but through terraform we have to explicitly allow it
+
+
+EC2 User Data
+• Set of commands you can provide to an instance at launch time. The easiest way is through shell scripts.
+• Generally used to update the instance or to install additional software rather than doing it once the instance
+is provisioned.
+• Adding user data scripts increases the boot time of the instance. You should allow a few minutes of extra
+time for the user scripts to finish successfully.
+
+When a user data script is processed, it is copied to and run from /var/lib/cloud/instances/instance-id/.
+The logs of userdata are stored in /var/log/cloud-init-output.log
+
+
+Terraform Provisioners
+• In Terraform, provisioners are used to execute scripts or actions on remote resources after they have
+been created or modified.
+• Provisioners allow you to perform tasks like configuring instances, installing software, or running scripts on
+virtual machines, containers, or other infrastructure resources managed by Terraform.
+
+Provisioners are a Last Resort !
+Terraform uses provisioners as a practical solution for handling actions that don't fit neatly into its
+declarative approach.
+However, provisioners introduce complexity and uncertainty to Terraform workflows as Terraform
+can't predict provisioner actions in its planning phase because they can perform a wide range of
+tasks!
+
+Terraform Provisioners
+• Terraform supports several types of provisioners:
+
+1. File Provisioners: File provisioners are used to copy files or directories to the newly created
+resource. This can be helpful for deploying configuration files, scripts, or other assets to your
+instances.
+2. Local Exec Provisioners: Local exec provisioners run scripts or commands on the machine where
+Terraform is executed after resource is created. These are generally used for tasks that don't
+require access to the remote resource. Ex: Running an ansible playbook
+3. Remote Exec Provisioners: These provisioners execute scripts or commands on a remote
+resource over SSH or WinRM (Windows Remote Management). They are typically used for tasks
+like initializing software, configuring settings, or performing other setup tasks on instances.
+
+
+Terraform File Provisioners
+• File provisioners are used to copy files or directories to the newly created resource. This can be helpfuitor
+deploying configuration files, scripts, or other assets to your instances.
+
+How does terraform copy files???
+ANS: Connection block
+The file provisioner supports both ssh and winrm type connections to connect to remote resources.
+You can create one or more connection blocks that describe how to access the remote resource.
+Connection blocks don't take a block label.
+
+A connection block nested in a provisioner block only affects that provisioner and overrides ar
+level connection settinas.
+
+• Expressions in connection blocks cannot refer to their parent resource by name. Ex: Connection block in
+aws_instance resource cannot access instance's attributes like its IP using the expression
+
+Instead, we can use the self keyboard to refer parent resource and all its attributes.
+connection {
+  type        = "ssh"
+  user        = "ubuntu"
+  private_key = file("demo-key")
+  host        = self.public_ip
+}
+
+Local-Exec Provisioner
+• Local exec provisioners run scripts or commands on the machine where Terraform commands are
+executed.
+• These are generally used for tasks that don't require access to the remote resource, such as setting up local
+configurations or performing actions on your local machine.
+• Ex: Running an ansible playbook
+
+Failure behavior
+• By default, provisioners that fail will also cause the Terraform apply itself to fail.
+• The on_failure setting can be used to change this behavior
+• continue - when set to continue, makes the terraform to Ignore the errors and continue with
+creation or destruction.
+• fail - when set to continue, terraform will raise an error and stop applying (the default behavior). If
+this is a creation provisioner, taint the resource
+
+Creation-Time Provisioners
+• Creation-time provisioners are only run during creation, not during updating or any other lifecycle.
+• If a creation-time provisioner fails, the resource is marked as tainted. A tainted resource will be planned for
+destruction and recreation upon the next terraform apply.
+
+Destroy-Time Provisioners
+• Destroy-time provisioners will run when the resource it is defined within is destroyed.
+• Destroy provisioners are run before the resource is destroyed.
+• If they fail, Terraform will error and rerun the provisioners again on the next terraform apply.
+
+Multiple Provisioners
+• Multiple provisioners can be specified within a resource.
+• They are executed in the order they're defined in the configuration.
+• You may also mix and match creation and destruction provisioners.
+
+Null Resource
+• In Terraform, the null_resource is a resource type that doesn't directly manage any infrastructure.
+• It is used for running local scripts, executing remote commands, or triggering external actions when specific
+conditions change.
+• The key idea is that it provides a way to interact with external systems and scripts within your Terraform
+configuration.
+
+The triggers block is used to specify a set of values that,
+when changed, will cause the resource to be recreated.
+In this case, we use timestamp() as a trigger, which will
+change every time Terraform runs.
+When triggers changes, null_resource resource is recreated. 
+resource "null_resource" "example" {
+  # Optional configuration settings go here
+
+  # Define triggers that will cause this resource to be recreated
+  triggers = {
+    timestamp = "${timestamp()}"
+  }
+
+  provisioner "local-exec" {
+    command = "echo Hello, world!"
+  }
+}
+
+
+Terraform taint: A tainted resource is considered as needing replacement during the next terraform apply. Tainting a resource essentially tells Terraform that the resource is "bad" or "out of date," and Terraform should plan to destroy and recreate it.
+
+Remote-Exec Provisioner
+• The remote-exec provisioner invokes a script or commands on a
+remote resource over SSH or WinRM. .
+• They are typically used for tasks like initializing software, configuring
+settings, or performing other setup tasks on instances.
+
+Terraform State
+The Terraform state is a necessary requirement for Terraform to function, which maps real world
+resources to your configuration, keep track of metadata, and to improve performance for large
+infrastructures.
+When Terraform creates a remote object, it will record the identity of that remote object in the state file.
+Prior to any operation, Terraform does a refresh to update the state with the real infrastructure.
+
+Mapping Objects
+Terraform maps config to the real-world resources.
+For example, resource "aws_instance" "web" in the configuration maps to the instance i-abcd1234 in the
+real infrastructure.
+Terraform maps each remote object is bound to only one resource instance.
+
+Metadata
+• Terraform tracks resource dependencies using metadata.
+• It uses this metadata to create a dependency order for terraform apply and destroy operations.
+• Terraform also retains a copy of the most recent set of dependencies within the state to ensure proper
+operations in case some of the resources are deleted and dependency order is compromised.
+Performance
+• In addition to basic mapping, Terraform stores a cache of the attribute values for all resources in the state.
+• This is usually done to improve the performance of large infrastructures.
+• For small infrastructures, Terraform can query your providers and sync the latest attributes of all the
+resources. This is the default behavior of Terraform: for every plan and apply.
+• For larger infrastructures, querying every resource is too slow due to time involved in receiving the
+responses and API rate limiting of most of the cloud providers.
+
+•.
+We can also make use of -refresh=false flag (terraform apply -refresh=false) as well as the -target flag
+to avoid refreshing the state before apply operations. In this case, the cached state is treated as the record
+of truth. This is useful if the infrastructure is quite large.
+
+Terraform refresh :  Terraform to update the state file with the real-world infrastructure. It reconciles the state Terraform knows about (via the state file) with the real-world infrastructure.
+
+Syncing
+• In the default configuration, Terraform stores the state in a file in the current working directory where
+Terraform was run. This is called as Local Backend
+• Using a local state file can have some significant disadvantages, especially as the complexity and
+collaboration of your infrastructure projects grow.:
+Lack of Collaboration: Local state files are not easily shareable or collaborative. They are
+typically limited to a single user or a single machine. In a team environment, it becomes
+challenging for multiple team members to work on the same infrastructure without causing
+conflicts or overwriting each other's state files.
+Concurrency Issues: When multiple users or automation processes attempt to apply changes
+simultaneously, local state files can lead to concurrency issues, such as data corruption and
+resource conflicts. Without proper locking mechanisms, it's challenging to coordinate and
+manage concurrent operations safely.
+Data Loss and Backup Issues: Local state files are susceptible to data loss, accidental deletions,
+or file corruption. There is no built-in mechanism for backup or versioning of state files.
+Security and Access Control: Local state files might contain sensitive information, such as API
+keys or secrets. Without proper access controls and encryption, this data can be at risk.
+
+Collaboration with Remote Backends
+• To mitigate these disadvantages of local backends, it's recommended to use a remote backend for
+storing the state file.
+Remote state backends provide solutions for collaboration, state locking, access control, and data
+protection, making them a more reliable and secure option for managing infrastructure.
+Common choices for remote state backends include Amazon S3, Azure Blob Storage, Google Cloud
+Storage, HashiCorp Terraform Cloud, and more.
+• With a fully-featured state backend, Terraform can use remote locking as a measure to avoid two or
+more different users accidentally running Terraform at the same time, and thus ensure that each
+Terraform run begins with the most recent updated state.
+Remote state solutions often include mechanisms for state locking that prevents multiple users or
+automation processes from modifying the state file simultaneously, reducing the risk of data corruption.
+
+
+
+This state is stored by default in a local JSON file named terraform. tfstate. This is also known as local
+backend which is the default
+It is recommended to store the state remotely using a remote backend like Azure Storage Account,
+Amazon S3, HashiCorp Consul, Terraform Cloud to version, encrypt, and securely share it with your
+team.
+It is a JSON file that stores information about the resources that Terraform manages, as well as their current
+state and dependencies
+Terraform utilizes the state file to determine the changes that need to be made to the infrastructure when a
+new configuration is applied. It also ensures that resources are not unnecessarily recreated across multiple
+runs of Terraform
+There is also a backup of the previous state in terraform.tfstate.backup
+When you execute terraform apply, a new terraform. tfstate and backup is written
+You can also version control the state to collaborate with other team members
+Unfortunately, you can get conflicts when 2 people work at the same time
+Local state works well in the beginning, but when you project becomes bigger, you might want to store your
+state remote.
+
+Inspection and Modification of State
+• While the format of the state files are just JSON, direct file editing of the state is not recommended:
+Terraform provides below commands to query and modify state information.
+terraform show - Shows the current state of the infrastructure as recorded in the state file in human
+readable format. With the -json flag, output will be shown in machine readable format.
+• terraform state - Advanced state management.
+
+
+Terraform state -h
+Terraform state list (command to see list of resources are created as a part of terraform)
+Terraform state show <resource_name> (command to see detailed info about particular resource)
+
+
+• terraform state list - List all the resources in the current state file.
+• terraform state show ‹ resource_type>. ‹ resource_name> - View the attributes and values of a
+specific resource in the Terraform state.
+• terraform state mv ‹ resource_type>. ‹old_name> ‹ resource_type>. ‹new_
+name> - Move an
+item in the state, for example, rename a resource in the state without recreating it.
+• terraform state rm ‹ resource_type>. ‹ resource_name> - Remove the specified instance from
+the state file. Useful when a resource has been manually deleted outside of Terraform. Be cautious when
+using this command, as it can lead to Terraform losing track of a resource that still exists in your
+infrastructure.
+
+Usecase1: create 2 ec2 instance through terraform —> manually delete 1 ec2 ==> behaviour in next plan or apply terraform shows 1 resource to add
+If we don’twant that ec2 any more then remove it from state file using terraform state rm ‹ resource_type>. ‹ resource_name> and also delete the  code for ec2 instance
+
+
+• terraform state pull › new. tfstate - Manually pull the latest state data from remote backend and
+save to a file.
+• terraform state push - Manually push the local state to a remote state backend.
+• terraform state replace-provider < old_provider> ‹new_provider › - Change the provider
+configuration for a resource in the state.
+
+Detecting and Managing Drift with Terraform
+One challenge when managing infrastructure as code is drift.
+Drift is the term for when the real-world state of your infrastructure differs from the state defined in your
+configuration.
+This can happen for many reasons: one such reason is when changes have been made manually or via other
+automation tools.
+Terraform cannot detect drift of resources and their associated attributes that are not managed using
+Terraform. For example, changes made through configuration management tools like Chef and Ansible.
+
+Created ec2 instance with 3 tags (terraform)—> manually add one more tag become 4—> do terraform refresh (this will update the 4th tag into the state file—>and when you do next apply it asks for code now present in ec2 instance manifest.. —> if we add the code and apply then infra and state synced
+Terraform refresh automatically update the state file agains real infra
+
+Terraform Refresh: Reconciling real-world drift
+The terraform refresh command is used to reconcile the real-world resources in your infrastructure with
+the Terraform state.
+It is primarily used when you suspect that the state has drifted out of sync with the actual resources in your
+cloud provider or infrastructure.
+This command does not create or modify any resources but updates the state with the latest information
+about existing resources.
+If a resource managed by Terraform is altered outside of Terraform, then Terraform will attempt to
+overwrite those changes back to the intended state. It does this by refreshing the state during a plan or an
+apply phase.
+
+Refresh-Only Mode
+• Refresh-only mode instructs Terraform to create a plan that updates the Terraform state to match
+changes made to remote objects outside of Terraform.
+• This is useful if state drift has occurred, and you want to reconcile your state file to match the drifted remote
+objects.
+• Applying a refresh-only run does not result in further changes to remote objects.
+• Use terraform plan -refresh-only or terraform apply -refresh-only
+
+• To always have the latest state of the
+infrastructure, we can store the state file in a
+remote environment with shared access.
+• With a single state file stored remotely, teams can
+ensure they always have the most up to date state
+file.
+• But, when multiple users or automation processes
+attempt to apply changes simultaneously, local
+state files can lead to concurrency issues, such as
+data corruption and resource conflicts.
+• Without proper locking mechanisms, it's
+challenging to manage concurrent operations.
+
+Terraform Remote Backend
+There are several reasons why remote state is essential:
+• Concurrency and Collaboration: In a collaborative environment, multiple team members may be working
+on the same infrastructure concurrently. Remote state allows all team members to share and access a
+single source of truth. It helps avoid conflicts and ensures that everyone is working with the same
+infrastructure state.
+• Locking and State Management: Remote state solutions often include mechanisms for state locking.
+This prevents multiple users or automation processes from modifying the state file simultaneously,
+reducing the risk of data corruption. Locking ensures that Terraform operations are performed
+sequentially and safely.
+• Data Sharing: Remote state makes it easy to share data between different Terraform configurations or
+projects. You can use outputs from one Terraform configuration as inputs in another, and remote state
+helps manage this sharing of data. It is especially valuable when managing complex, multi-tiered
+infrastructures.
+• Backup and Disaster Recovery: Storing the state remotely provides an additional layer of backup and
+disaster recovery. If you lose your local state file, you can always retrieve it from the remote storage.
+Many remgte state backends offer versioning to revert to previous states if needed.
+
+• Security and Access Control: Remote state solutions can provide access control and security features.
+You can restrict who can read or write to the state, helping to secure sensitive information such as
+credentials and secrets.
+• Isolation from Workspace: Remote state allows you to isolate the state from the actual workspace or
+working directory. This is particularly useful in situations where you have multiple environments (e.g.,
+development, staging, production). You can manage the state for each environment separately while
+still having a centralized location for state management.
+• Scalability: As your infrastructure grows, managing state in a remote and scalable storage solution
+becomes increasingly important. It's more efficient to use remote storage backends designed for this
+purpose, rather than relying on local files.
+
+
+• Amazon S3 as a backend is also not immune to
+race conditions
+• Race conditions occurs If multiple Terraform runs
+attempt to write to the same state file
+simultaneously leading to data corruption of state
+file or unintended consequences
+• Amazon S3 does not provide built-in .locking
+mechanisms for state files. Without proper
+locking, concurrent Terraform operations can lead
+to race conditions
+• In a multi-user environment, the lack of locking can
+lead to overwrites of the state file. We need to
+block the second terraform apply command until
+the previous apply command is completed.
+
+
+State Lock File
+When you execute terraform plan, apply or destroy commands, terraform creates a temporary file
+• terraform. tfstate. lock. info that exists for the duration until the command execution is completed.
+This file is part of Terraform's state locking mechanism and contains lock-related metadata.
+It ensures that only one Terraform operation can modify the state at a time when multiple developers try to apply their
+changes simultaneously inside a shared environment where the state file is accessible to everyone.
+The file is typically in JSON format and contains information such as the lock ID, the timestamp when the lock was
+acquired, and the identity (e.g., user or process) that acquired the lock.
+Users typically do not need to interact with or modify this file manually.
+
+Remote State with State Locking
+• Here, we are using an S3 backend with DynamoDB
+for Terraform.
+• Terraform will store the state within S3 and
+DynamoDB is used for state locking while
+performing changes.
+• It ensures that only one user or process can
+update the state file at a time, preventing data
+corruption and race conditions.
+• If another Terraform operation is running,
+attempts to run terraform apply will be locked until
+the previous operation completes.
+• By setting up Terraform with an S3 and
+DynamoDB backend, you'll have a scalable, secure,
+and highly available infrastructure as code
+management system. It's well-suited for team
+collaboration and production environments, where
+data integrity and concurrency control are crucial.
+
+Amazon S3 and DynamoDB for state locking
+Using Amazon S3 and Amazon DynamoDB for state locking in Terraform is a powerful and recommended
+approach to ensure data consistency and coordination of concurrent Terraform operations.
+
+1. Create an S3 Bucket
+• Log in to the AWS Management Console.
+• Create an S3 bucket that will be used to store your Terraform state files
+• Make sure you choose a unique name for the bucket and configure any
+desired settings like versioning and encryption.
+2. Create a DynamoDB Table
+• In the AWS Management Console, navigate to the DynamoDB service.
+• Create a DynamoDB table that will be used for state locking.
+• The table must have a partition key named LockID with type of String.
+If not configured, state locking will be disabled.
+
+3. Configure Your Terraform Backend
+• In your Terraform configuration, specify the S3 bucket and DynamoDB
+table as the backend configuration using the backend block in your .tf
+files.
+
+terraform {
+  backend "s3" {
+    bucket         = "your-s3-bucket-name"
+    key            = "path/to/your/statefile.tfstate"
+    region         = "your-aws-region"
+    encrypt        = true
+    dynamodb_table = "your-dynamodb-table-name"
+  }
+}
+
+
+Terraform Workspaces
+Consider the following scenario: you have a Terraform setup and wish to use it to create infrastructure in
+several environments, such as development, staging and production each with different configurations.
+
+• Is it a good idea to maintain separate folders, each with the required configurations for the environments? Dev.tfvars . Int.tfvars 
+
+• Workspaces allow you to manage multiple environments or configurations of your infrastructure within a
+single Terraform configuration. This is called DRY (Don't Repeat Yourself) approach.
+This can be especially useful in scenarios where you have multiple deployment environments (e.g.,
+development, staging, production) or you need to manage multiple versions of your infrastructure.
+
+Terraform workspace -h
+terraform workspace list
+terraform workspace new dev (creation of workspace)
+Terraform workspace select dev
+
+Current Workspace Interpolation
+Within the Terraform configuration, you may include the name of the current workspace using the
+${ terraform. workspace} interpolation sequence.
+This can be used anywhere interpolations are allowed.
+Referencing the current workspace is useful for changing behavior based on the workspace.
+
+After creating workspace if we do init or plan or apply. Lock file ,state file everything will be created inside a dev folder
+
+terraform init -backend-config="bucket=my-terraform-state" -backend-config="key=terraform.tfstate" -backend-config="region=us-west-1"
+
+
+Terraform Modules
+Terraform modules are a powerful feature that helps in writing modular, maintainable, and reusable
+infrastructure code, making infrastructure management more efficient and scalable.
+They organize your infrastructure code into smaller, self-contained units.
+• You can define a set of resources, configurations, and variables within a module and then reuse that module
+in multiple Terraform configurations. This makes it easy to create consistent infrastructure patterns across
+different projects.
+Modules abstract the details of a particular component or service making it easier to manage and consume.
+•
+Modules can be versioned to control updates and changes.
+• You can nest modules within other modules, creating complex infrastructure patterns.
+
+• Modules consists of a collection of . tf and/or . tf. json
+configuration files kept together in a directory.
+You can find pre-built modules created by the community for
+common infrastructure components like VPCs in the
+Terraform Registry
+
+
+Dynamic Blocks
+In Terraform, dynamic blocks provide a way to construct repetitive nested blocks dynamically within a
+resource configuration.
+• They allow you to generate multiple instances of a nested block based on the elements of a list, set, or
+map.
+Can be used inside resource, data, provider, and provisioner blocks.
+There are also other ways to achieve similar results, such as using count or for _each directly on the
+resource block.
+
+Difference between Map and object is that map will have same datatype but object willl have different data type
+
+Terraform Functions
+Terraform provides several built-in functions that enable you to manipulate data, perform computations,
+and create more dynamic configurations.
+
+Numeric Functions
+abs: returns the absolute value of the given number. Negative
+numbers are converted to positive.
+2. ceil: returns the closest whole number that is greater than or
+equal to the given value, which may be a fraction.
+3. floor: returns the closest whole number that is less than or equal
+to the given value, which may be a fraction.
+4. log: returns the logarithm of a given number in a given base.
+5. pow: calculates an exponent, by raising its first argument to the
+power of the second argument.
+6.
+min/max: takes one or more numbers and returns the greatest
+number from the set.
+macis (3, 2, 1, 5, 6)
+
+String Functions
+length
+2. substr
+3. split
+4. join
+5.
+startswith
+6. endswith
+7. strcontains
+8. lower
+9. upper
+10. format
+11. regex
+12. regexall
