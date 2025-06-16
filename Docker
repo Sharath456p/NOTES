@@ -1,0 +1,1916 @@
+Docker - Vikram
+
+sudo usermod -aG docker your_username
+docker builder prune -a  (clearing all build cache)
+docker stop $(docker ps -q) 
+docker rm $(docker ps -aq)
+docker rmi $(docker images -aq)     
+
+
+
+docker system prune -a (command to remove all)
+cd /etc/yum (here we can see yum repositories)
+systemctl start docker ; systemctl enable docker
+var/lib/docker. (Home directory of docker)
+docker info(provides Information about client and server)
+cat  /etc/passwd
+usermod -aG docker ec2-user (adding docker group to access daemon)
+newgrp docker
+repository(which means having nginx software with different version)
+registry(which contains n number of repositories like nginx)
+Alpine - minimum version of any docker images
+docker system df(it shows the space occupied by images and container)
+Docker image ls
+Docker search nginx(search for nginx images in docker.,hub.com)
+Docker image history nginx
+Docker image inspect nginx
+Docker tag ubuntu:1.0 kunchalavikram/ubuntu:1.0
+Docker push  kunchalavikram/ubuntu:1.0
+Docker login  -u ${USERNAME} -p {PASSWORD}(commend to login into the registry)
+Docker login -u  ${USERNAME} -p {PASSWORD}  https://tesla.mop.com <repo URL>
+Cd /root/.docker/config.json (cat config.json contains the docker login credentials in base64 encoded)
+echo -n “admin:admin123” | base64 (result dkjhwdjwdwdwhdwdwdwd=)
+echo “dkjhwdjwdwdwhdwdwdwd=“  | base64 -d
+Docker system  prune 
+Docker images prune -f --all
+docker image prune
+Docker container ls (to see the containers
+Docker ps ( to see only running conatiners)
+Docker ps -a (to see all running and stopped container)
+Docker run nginx:latest
+Kill <pid> (soft kill of the process)
+Kill -9 (hard kill) <pid> (signals in linux)
+CTRL+C (interrupt the process)
+Docker container rm <contaimer_id/name> -f (which forces to remove running container)
+Docker run -d —name=web nginx:latest
+Docker restart web
+Docker logs -f <conatoimer_ID> (to see the log stream continuously)
+docker ps -aq ( to see only ids of the container)
+Docker rm -f ${docker ps -aq} 
+Docker run -it nginx (running container in interactive terminal)
+CTRL+p +q ( which exits the terminal but the container process)
+Docker exec - it <container_id> /bin/bash
+Docker stop <container_id> (it will kill the container process with the grace period of 10seconds)
+Docker kill <container_id>  (immediate termination of the container)
+Docker stats <container_id>  (which gives the information about the resource utilisation)
+Docker top <container_id>  (which shows the UID PID of the host)
+top or ps aux | grep <container_id>  (which gives all the running process in current host)
+Kill -9 9158 (which kills the process interns kills the container)
+Docker run -it -p 8080:80 nginx (port mapping to the host)
+Docker run  —rm  —name os ubuntu ( this will remove the exited container)
+Docker commit <container_id> <new image name>(creating image out of container)
+Docker image save <imagename>:1.0.0 > ubuntu.tar ( this command saves the image in tar file in local computer>
+Docker image load < ubuntu.tar ( this will extracts the image from the tar file)
+Docker rmi <container_id> ( deleting image from docker host)
+Docker exec works for only running container
+Docker attach <container_id>  ( which shows the logs of the container in the terminal)
+curl --unix-socket /var/run/docker.sock http://localhost/v1,43/info. (C0mmand to see the docker engine version  through unix socket)
+
+Docker volumes : 1.Named volumes 2.Bind
+Mounting a volume created using docker create volume command . Created under volume location /var/lib/docker/volume/my-vol/_data
+Docker volume create my-vol (command to create docker volume)
+Docker run -it -p 80:80 —name os -v my-vol:/app nginx:latest 
+Docker run -it -p 80:80 —name os —mount source=myvol12, target=/app nginx:latest 
+Docker run -it -p 80:80 —name os —mount source=myvol12,target=/app:ro  nginx:latest (read only access container can only read the date mounted to the container)
+Bind volumes : Mounting an existing volumes stored anywhere on the host machine . They usually start with / , $PWD , ./
+Docker run -it -p 80:80 —name os -v /tpm/dock/backup:/tmp/lib/ecr/html  nginx:latest
+If we change the file in host level it will reflect the container similarly if we change file inside the container also is gonna change in the host mount location where is file is backed up.
+Shared volume: docker run —name C1 -p 80:80 -v backup:/temp nginx:latest
+Docker run —name c2 -p 80:80 —volumes-from C1 nginx:latest (taking the volumes from another container using —volumes-from command)
+
+Proxy repository is a proxy of a remote repository. Any request for
+a artifact is first checked against the local content of the proxy
+repository. If no local artifact is found, the request is forwarded
+to the remote repository. Ex: maven-central
+
+Hosted repository is one that you host on your server through third
+party softwares like Nexus. It hosts any private libraries and
+artifacts that shouldn't be public for security reasons.
+
+lscpu (command to see the cpu’s in the server/host)
+Bydefaultt docker will not allow us to push or pull from the insecure registries(http) in order to overcome this we need to create/update the ip:port in json format in /etc/docker/daemon.json  { 123.33.3.3:8-82}
+Docker login 23.33.3.3:8082
+A container can have multiple process every process listens on some port number
+Once we do aws configure and enter the access key and secret key in the root folder it is going to create a .aws folder which contains configure (region information) and credentials file which contains access key and secret key with default profile..if we execute “aws s3 ls “ which is by default using default profile make a another entry Access key and secret key with [dev-cluster profile] the we have to use “ aws s3 ls —profile dev-cluster “
+
+aws ecr get-login-password —region ap-south-1
+aws ecr get-login-password --region region | docker login --username AWS --password-stdin aws_account_id.dkrecr.region.amazonaws.com
+Env or printenv (which shows all the environmental variable in the system)
+
+ENVIRONMENT VARIABLES
+
+• Two fundamental components of any computer programming language are
+variables and constants
+• Variables and constants both represent unique memory locations containing
+data the program uses in its calculations. The difference between the two
+is that variables values may change during execution, while constant
+values cannot be reassigned.
+• An environment variable is a variable whose V
+value is set outside the
+program, typically through functionality built into the operating system
+or microservice. An environment variable is made up of a name/value pair,
+and any number may be created and available for reference at a point in
+time.
+• Use cases for environment variables:
+Execution mode (e.g., production, development, staging, etc.)
+• Domain names
+DevOrs MDBe Usernames
+
+It is often a good idea to separate our application from their
+configuration by injecting the configuration into our application
+separately. Ex: DB names, usernames, PORTs etc
+Configuration should not be hard coded
+We can achieve this by passing the configuration as environment
+variables to Docker containers
+• ENVs can be passed as Key Value pairs as env file
+Passing the values directly as key-value pairs is probably the least
+secure, as there is a greater risk of leaking the sensitive values.
+Defining sensitive values in the local environment or in a file is a
+better choice, as both can be secured from unauthorized access.
+• You can view in the ENs using docker container inspect command
+
+docker run --rm -e or —env  NAME=DevOps nginx:latest env (setting up of environment variable)
+docker run --rm - -env-file env.file nginx:latest env (instead of giving one on one we cal write all env variable into one file and call it using the —env-file)
+docker run -d --name web -e BACKGROUND_COLOR=blue -e TEXT_COLOR=white -p 80:5000 kunchalavikram/flask-env:latest
+
+Docker Networking
+
+In linux system the DNS name server configuration lies in /etc/resolve.conf
+Docker networks types: BRIDGE , NONE , HOST
+When you start Docker, a default bridge network interface called docker0 is created automatically, and newly-started containers connect to it unless otherwise specified
+Ifconfig shows the docker0 network interface details in the docker host.
+Subnet is a concept where we are breaking large number of system into smaller piece in order to have isolation.
+docker container inspect c1 --format '{{ NetworkSettings.Networks.bridge.IPAddress }}' (which return only IP addresss of the container)
+There is no DNS resolver in default bridge networks. Containers can talk to each other only through IP address.
+docker network create --driver bridge <network name>/my_net (Command to create a custom bridge  network)
+Brctl show (brutal utility to show the how many bridge networks are available in the host and containers attached to it)
+docker run -d - network  my_net --name c1 alpine ( creating a container in the custom bridge network)
+Docker network inspect bridge ( it shows the subnet range and gateway and how many containers are created under this bridge network)
+Docker network ls (to see the list of network)
+DNS resolution can be possible in custom bridge network decoz a new name server is created which maintains the mapping of ip into DNS name ( docker exec -it c2 ping c1)
+We can connect container to two different networks which results in 2 IP address for the container
+Docker network connect my_net C2
+Docker network disconnect  bridge C1
+
+Host network 
+docker network create --driver host <network name>/my_net
+In host network there is no port mapping needed container ip is not assigned we can directly access the service runninng in container via the host ip and port.
+None network.- no network attached to the container 
+
+Dockerfile.
+Dockerfile is essentially the build instructions to build your own
+docker image
+It is a text document that contains all commands to assemble the image
+Name of the docker file is Dockerfile without any extensions. Although
+we can use any naming convention
+A Docker image typically consists of:
+1. A base Docker image on top of which we build our own Docker image
+A set of tools and applications to be installed in the new Docker image
+3. A set of files to be copied into the Docker image (e.g configuration
+files, application binaries)
+4. Environment variables, health check commands etc
+
+Only deploy the war file and create the docker image is the best way of the image creation.
+MULTISTAGE BUILDS:
+Build happens in multiple stages but the last stage of action is the actual docker image
+Using capital instructions like FROM , RUN is not a standard it woks for small run , from.
+
+FROM defines the base image used to start the build process
+MAINTAINER/LABEL defines a full name and email address of the image creator
+COPY copies one or more files from the Docker host into the Docker image
+RUN runs commands while image is being built from the Dockerfile and saves result as a new layer
+ARG to supply arguments while building to the image
+ENV to supply environment variables to the image
+EXPOSE exposes a specific port to enable networking between the container and the
+outside world
+VOLUME is used to enable access from the container to a directory on the host machine
+WORKDIR used to set default working directory for the container. Similar to cd in
+the container
+CMD command that runs when the container starts
+ENTRYPOINT command that runs when the container starts
+HEALTHCHECK to determine the health of a container/application. Queries the health
+endpoint
+ARG is the only command that can be written before FROM - for specific use case
+Distroless images from google doesn’t have any debugging utility like ping, curl bash or sh . It just having applications and dependencies
+docker build -t kunchalavikram/demoapp: 1. 0 . Or $PWD (Docker build doesn’t support if the Dockerfile in the previous directory)
+
+Content of the current directory is called build contexts
+
+docker build -t kunchalavikram/demoapp: 1. 0 -f or —file Dockerfile_dev .  (Build command for custom docker file name)
+
+ARG 
+Arguments are build variables 
+
+ARG IMAGE TAG 3.7-slim-buster
+FROM python: ${IMAGE_TAG}
+docker build -t kunchalavikram/demoapp:1.0 -f  Dockerfile dev —build-arg IMAGE_TAG=latest
+
+LABELS
+The LABEL instruction adds metadata to an image.
+A LABEL is a key-value pair. To include spaces within a LABEL value, use quotes and backslashes for multilines.
+LABEL com.example. label-with-value="foo"
+LABEL version="1.0'
+LABEL description-"This text illustrates
+that label-values can span multiple lines.
+
+COPY 
+COPY command copies one or more files from the Docker host into the Docker image.
+Can copy a file or a directory from the Docker host to the Docker image.
+# Copy files: COPY <SRC> <DEST>
+COPY . .
+COPY main.py /tmp
+# Copy contents of a directory
+COPY /myapp/config/prod /myapp/config
+# Copy multiple files. Destination to end with /
+COPY /myapp/config/prod/conf1.cfg  /myapp/config/prod/conf2.cfg   /myapp/config/
+COPY *.txt  ./
+copY *.jar  /app
+
+FROM nginx:alpine
+COPY index.html  /us/share/nginx/html. (When we build it it replaces the default index.html file)
+
+ADD
+ADD command also copies one or more files/directories from the Docker host into the Docker image. But, it can also extract TAR files from the Docker host into the Docker image and download files from a URL and copy them into the Docker image. It eliminates the needed for untar and download utilities like wget and curl.
+
+ADD home.txt /mydir
+ADD /source/file/path /destination/path
+ADD myapp.tar  /myapp/
+ADD http://saurce.file/url  /destination/path
+
+RUN 
+FROM ubuntu:latest
+RUN apt update -y
+RUN apt install iputils-ping -y
+RUN [" /bin/echo”,”hello”]     (This is becoz in some base image does not support the shell process so we are invoking echo from its binary “/bin/echo” its always good practise to invoke binary not in shell mode)(only echo is the shell supported command) 
+RUN echo "world"
+
+#Dockerfile
+FROM ubuntu:rolling
+RUN apt-get install wet &&\
+         wget https://…/downloadedfile.tar && \
+         tar xvzf downloadedfile.tar && \                   &&(it will go for next command only if the current command get succeeded) || (OR command it will move to next command even if the current one fails)
+         rm downloadedfile.tar && \
+         apt-get remove wet
+
+Env
+
+FROM nginx:alpine
+ENV NGINX_RUN_USER www-data
+ENV NGINX_RUN_GROUP www-data
+ENV NGINX_LOG_DIR /var/log/nginx
+
+Docker run -it —name web -e NGINX_RUN_USER=www-nginx  -e USER_DB=postgress  —env-file=.env nginx:latest printenv 
+
+
+WORKDIR 
+WORKDIR instruction sets the working directory for any RUN, CMD, ENTRYPOINT, COPY and ADD instructions If the directory specified by WORKDIR doesn't exist, it will be created It is like create a directory if it doesn't exist then cd into that directory
+
+FROM nginx:alpine
+WORKDIR /app  
+WORKDIR  node                  (node directory is created under app folder and cd node to it)                              or RUN mkdir /app.   cd /app these two line work is done by the WORKDIR command in the docker file.
+COPY. .  or 
+COPY . /app/node
+
+WORKDIR /a
+WORKDIR b
+WORKDIR c
+RUN pwd                output : pwd is /a/b/c
+
+EXPOSE 
+
+EXPOSE instruction functions as a type of documentation between the person who builds the image and the person who runs the container, about which ports are intended to be published.
+It does not actually publish the port.You can specify whether the port listens on TCP or UDP, and the default is TCP if the protocol is not specified.
+To actually publish the port when running the container, use the -p flag on docker run to publish.
+EXPOSE 8081/tcp
+EXPOSE 80/udp
+docker run -p 80:8081/tcp -p 80:80/udp …..
+
+VOLUME
+VOLUME instruction creates a directory inside the Docker image which you can later mount a volume (directory to from the Docker host In other words, you can create a directory inside the docker image, e.g. called /app
+VOLUME /app
+VOLUME ["/var/log/"]
+RUN mkdir /myvol.    docker run -p 80:80 -v nginx_data: /app nginx
+
+CMD
+ 
+CMD command is used to give the default commands to be run when starting the container
+It doesn't execute during image build stage like RUN
+There can only be one CMD instruction in a Dockerfile. If you list more than one CMD then only the last CMD will take effect
+These commands run only when there is no argument specified while running the container
+You can check the default CMD of an image by docker image inspect
+Has 3 forms
+  CMD ["executable", "param1", "param2"] (exec form, this is the preferred form)
+  CMD ["param1", "param2"] (as default parameters to ENTRYPOINT)
+  CMD command param1 param2 (shell form)
+
+FROM ubuntu:trusty
+CMD ["/bin/ping","-c4”,”8.8.8.8”]
+WE CAN OVERRIDE THE CMD INSTRUCTION AT THE RUNTIME. (Docker run -it —name c1 myubuntu:latest  ping localhost)
+
+ENTRYPOINT
+Entrypoint cannot be overridden 
+FROM ubuntu:trusty
+ENTRYPOINT ["/bin/ping","-c4”,”8.8.8.8”].  (Docker run -it —name c1 myubuntu:latest  ping localhost)—>It throws an error “Ping unknown host ping error”)
+IF both CMD and ENTRYPOINT is present in docker file …  ENTRYPOINT will first execute before CMD. [ENTRYPOINT+CMD] 
+#Dockerfile
+FROM ubuntu:trusty
+CMD ["8.8.8.8"]
+ENTRYPOINT [" /bin/ping”] (executable form)    (Docker run -it —name c1 myubuntu:latest  localhost. (Local host is the CMD command which is overriding at the run time EP+CMD))
+
+Entrypoint also can be changed by specifying externally at the run time using —entrypoint .(Docker run -it —name c1 —entrypoint=sleep myubuntu:latest 20)
+
+SHELL or Executable..
+1. /bin/sh won't forward any POSIX signals to child processes. So, bash/sh cannot be PID 1
+2. Not all docker images has shell binary inside it. So shell form commands cannot be executed, and hence the container fails
+
+When using the shell form, the specified binary command is executed with an invocation of the shell using bin sh -c
+You can see this clearly if you run a container and then look at the docker ps output. Docker exec -it C1 top
+
+HEALTHCHECK
+Health Check is all about checking the health of a Docker container
+If the process/application is running successfully in the container, it is
+considered healthy
+Mandatory for production applications
+Sometimes our application crashes but the process still runs. In these
+scenarios, we might not know the exact status of the container. So proper
+health checks are to be created
+There are two different ways to configure the HEALTHCHECK in docker:
+1. HEALTHCHECK [OPTIONS] CMD command
+2. HEALTHCHECK NONE
+~ Pull up for precise seeking
+HEALTHCHECK MD curl --fail http://<URL or Health Endpoint> I| ex
+The curl command checks whether the application is running or not making a request to
+If the request returns a 200, it will return exit code 0; if the application crashes,
+return exit code
+
+rm -rf *.gz
+
+Using Kaniko and Build we can build the docker images.
+docker build --no-cache -t java-normal-build . (No cache helps in building from scratch)
+
+Multistage builds
+#Dockerfile
+FROM maven: 3.6.3-jdk-8 as BUILD
+WORKDIR /app
+COPY . .
+RUN mvn clean package /app/target /demo-0.0.1-SNAPSHOT.jar
+
+FROM openjdk:8-jre-alpine3.9
+WORKDIR /app
+COPY --from=BUILD /app/target/demo-0.0.1-SNAPSHOT.jar .
+ENTRYPOINT ["java","-jar","/app/demo-0.0.1-SNAPSHOT.jar"] 
+
+Simple python application
+
+import os
+import time
+while True:
+	for k, v in os. environ. items () :
+		print (f' {k}={v}*)
+	time.sleep (5)
+Compile based language must convert into some artifacts.
+Example: go run main.go output: hello world   go build main.go —>it will create main.exe (artifacts) ignorer to run “main.exe”
+
+FROM golang: 1.16-alpine as build
+WORKDIR /app
+COPY main.go
+RUN go build main.go
+
+FROM alpine:latest
+WORKDIR /app
+copy --from-build /app/main .
+ENTRYPOINT ["/app/main"]
+
+Usecase Connecting python Db connector app to the mysql database.
+Step1: Spin up the mysql docker container with the (docker run -d - -name db -e MYSOL ROOT PASSWORD=root -e MYSQL DATABASE=test mysql: latest)
+Step2:docker run --rm -e DB_HOST=172.17.0.2 -e DB_USER=root -e DB_ PASSWORD=root -e DATABASE=test kunchalavikram/db-connector:1.0
+
+docker network create test
+docker run -d --net test - -name b -e MYSOL ROOT PASSWORD=root -e MYSOL DATABASE=test mysal: latest
+docker run --rm  --net test  -e DB_HOST=172.17.0.2 -e DB_USER=root -e DB_ PASSWORD=root -e DATABASE=test kunchalavikram/db-connector:1.0
+
+LOAD BALANCER
+
+Load balancing is the process of distributing network traffic across a group of backend servers, also known as a server farm or server pool.
+This ensures no single server bears too much demand/load. By spreading the load evenly, load balancing improves application responsiveness.
+It also increases availability of applications and websites for users. Modern applications cannot run without load balancers.
+A load balancer acts as the "traffic cop' sitting in front of your servers and routing client requests across all servers capable of fulfilling those requests in a manner that maximizes speed and capacity utilization and ensures thone server is overworked, which could degrade performance.
+
+Loadbalancing algorithms
+1.RoundRobin
+2.Least connection
+3.Least time.
+4.Hash.
+
+PROXY SERVERS.
+Proxies are intermediaries between a user and a web server. Both proxy servers and load balancer are key components of the client-server architecture. Depending upon the location of the proxy server; user end or server end, it
+is called Forward or Reverse Proxy
+
+REVERSE PROXY SERVERS
+A Reverse Proxy acts as a server for the users. Each and every request made by a user is directed towards a reverse proxy, thereby acting as an interface for all the servers in the back end. It receives initial HTTP connection requests, acting like the actual endpoint. This proxy server which is present with web server end.It acts as the firewall
+
+Advantage of Reverse Proxy.
+A Reverse Proxy hides the topological design of the servers in the background. Also act as a Cache, which should mean reduced load on the back- end servers. Makes it easy to log and audit all the requests
+Anonymity and security. Since reverse proxies intercept all the incoming requests, they serve as an additional level of protection for backend servers. It helps prevent any malicious actors from abusing web servers by blocking suspicious traffic from specific IP addresses.
+Load balancing. Essentially Load Balancer is one of the applications of a Reverse ProXY
+
+FORWARD PROXY SERVER
+
+A Forward Proxy sits in front of a user and acts as a mediator between users and the web servers they access. The user's request goes through the forward proxy first and thenreaches the web page. Once the data from the server  is retrieved,it is sent to the proxy server, redirecting it back to the requester.
+
+Avantage:
+1.The web server don’t the real identity of the user/requestor it only knows the identity of the Fproxy server.
+2.From the server's perspective, the request is made by the proxy server itself and not the user. Forward proxies brings in lot of advantages to organizations, such as universities and enterprises
+       Block employees/students from visiting certain websites
+       Monitor employee online activity
+       Block malicious traffic from reaching an origin server
+       Improve the user experience by caching external site content
+
+Nginx as a REVERSE PROXY.
+
+Step1 : run the 3 containers 
+docker run -d --name hello1—net my _net tutum/hello-world
+docker run -d --name hello2 - -net my net tutum/hello-world
+docker run -d --name hello --net my net tutum/hello-world
+
+Step2: run the nginx container:
+docker run -d --net my_net - -name reverse-proxy -p 80:80 nginx
+docker exec -it reverse-proxy /bin/bash
+Change the config file /etc/nginx/conf.d/default.conf and add the below content.
+#IPs represent the EC2 public IP
+Edit the configuration 
+upstream backends{
+  server hello1 or ip_ofthe_container:80;
+  server hello2 or ip_ofthe_container:80;
+  server hello3 or ip_ofthe_container:80;
+}
+server {
+listen 80;
+location / {
+proxy_pass http://backends;
+}
+}
+Restart  the nginx container  (docker restart reverse-proxy)
+
+HA proxy as reverse proxy:
+
+docker network create my_net
+docker run -d - -net my net - -name c1 kunchalavikram/hello-flask:v1
+docker run -d --net my_net - -name c2 kunchalavikram/hello-flask:v1
+docker run -d - -net my net - -name c3 kunchalavikram/hello-flask:v1 
+docker run -d --net my net -p 80:80 --name haproxy -v haproxy:/us/local/etc/haproxy:ro haproxytech/haproxy-ubuntu: 2.0
+In docker host : cd var/lib/docker/volumes/haproxy/_data/
+Ls modify HAProxy.cfg  | modify backend app and give ip/container name with port config
+
+backend app
+balance.  roundrobin
+server app1 c1:5000 check
+server app2 c2:5000 check
+server арр3 c3:5000 check
+
+Advantage of hsproxy is does the heatlh checks if we remove 2 container from the docker host it still  fwd to only one image.
+
+DNS round robin
+demo.sdwh.local 10.100.100.11
+demo.sdwh.local 10.100.100.12  for one DNS name It have multiple IP address
+
+docker run -d --net my net --name c1 --net-alias web  kunchalavikram/hello-flask:v1
+docker run -d --net my_net  --name c2 --net-alias web kunchalavikram/hello-flask:vi
+docker run -d --net my net --name c3 --net-alias web kunchalavikram/hello-flask:v1
+docker run --rm --net my_net curlimages /curl web:5000
+
+Multistage builds
+
+In compile based language the source code is not exposed . Java- produces .jar files , go-produces exe or bin , we will only run final executables execution of these artefacts is faster because it is already compiled.
+War file artefacts need to be deployed in tomcat
+#Dockerfile 
+FROM alpine/git as gitclone
+WORKDIR /app
+RUN git clone https://github.com/kunchalavikram1427/maven-employee-web-application.git
+
+FROM maven:3.8.2-openjdk-11 as Build or 0(if we leave empty 0 index will. Be taken by docker file)
+WORKDIR /app
+COPY --from=gitclone /app/maven-employee-web-application/ ./
+RUN mvn package
+
+FROM tomcat:9.0
+COPY --from=0  or Build /app/target/employee-application.war /usr/local/tomcat/webapps
+EXPOSE 8080
+
+#Dockerfile  Copying the artifact from local to the image.
+FROM tomcat:9.0
+COPY target/*.war /usr/local/tomcat/webapps
+EXPOSE 8080
+
+#Dockerfile 
+FROM git as clone
+WORKDIR /app
+RUN git clone <URL>                          for example (docker build —target=clone -t…….) here it dockerize or creates an image in the 1st stage itself)
+
+FROM maven: 3.8.6-openjdk-8 as build
+WORKDIR /app
+copy --from=clone /app
+RUN mvn package
+
+FROM tomcat:9.0
+coPY --from-build target/employee-application.war /us/local/tomcat/webapps
+
+Container Security
+Containers are increasingly becoming popular but do present security risks that can potentially cause businesses millions of dollars due to hackers gaining access to valuabte data inside the containers.
+Containerization is one of the core stages in the DevOps process where security must be looked at on a serious note A container image can have many bugs and security vulnerabilities, which gives a good opportunity for hackers to get access to the application or data present on the container costing millions to the companYevo Hence, it is crucial to scan and audit the images and containers regularly DevSecOps plays an important role in
+adding security to the DevOps processes, including scanning images and containers for bugs and vulnerabilities.
+When building Docker images, we're often concerned with two things:
+1. The security (through scanning each image layer)
+2. The size of the image (Multistage builds & Distroless Images)
+When it comes to container security, distroless or minimal base images,
+like alpine, reduce the attack surface.
+Security Scan
+• A container image is composed of
+several layers, and each one of them
+could be a source of a vulnerability
+• So, scanning each layer is very crucial
+in DevSecOps
+• Container scanning is the process of
+identifying vulnerabilities within
+containers by using scanning tools
+like Synk, Anchore etc
+• It's key to container security, and
+enables developers and cybersecurity
+teams to fix security threats in
+contaiherized applications before Deployment
+
+	
+	
+	
+	
+• Dockerfile Some best practices:
+• Do not run containers as ROOT
+• Avoid copying unnecessary files. Use docker ignore
+• Merge layers
+• Using Alpine or Distroless images as base images
+• Using Multistage Builds
+• Health checks
+• Avoid exposing unnecessary ports and hardcoding the credentials
+
+Alpine Images
+• Alpine Linux is a Linux distribution built around musl lib and BusyBox
+• It is only 5MB in size which makes it a great image base for utilities and even
+production applications
+• Using Alpine Linux as the base image makes the containers smaller than most
+distribution base images like centos, ubuntu etc
+By using Alpine linux as the base image and adding only required
+dependencies/artifacts on top of it, results in smaller and cleaner docker image
+
+Distroless Container Images
+• Pioneered by Google to improve security and container size
+• Distroless Container Images are language focused Docker images, sans the operating system
+distribution
+Distroless images only contains your application and its runtime dependencies, not other usual OS
+package managers, Linux shells or any such programs which we usually would expect in a standard Linux
+distribution
+• This approach creates a smaller attack surface, reduces compliance scope, and results in a small, lean and
+clean container images and thus increases security
+• Google has published a set of distroless container images for different languages
+
+Docker compose:
+
+Docker Compose is used to run multiple containers as a single service.
+For example, an application requires both WORDPRESS and MySQL containers, you
+could create one file which would start both the containers as a
+service (docker compose) or start each one separately (docker run)
+All services are to be defined in YAML format
+uname -a (command to see the os information)
+
+version: "3.9"  # optional since v1.27.0
+services:
+  web:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: go-app-ms:latest
+    ports:
+      - "80:80"
+    restart: always
+    networks:
+      - web
+
+networks:
+  web:
+
+version: '3.10'
+services:
+  wordpress:
+    image: wordpress
+    depends_on:
+     - mysql
+    ports:
+    - 8080:80
+   environment:
+     WORDPRESS_DB_HOST: mysql
+     WORDPRESS_DB_NAME: wordpress
+     WORDPRESS_DB_USER: wordpress
+     WORDPRESS_ DB_ PASSWORD: wordpress
+   volumes:
+   - ./wordpress-data:/var /www/html
+   networks:
+   - my_net
+  mysql:
+    image: mariadb
+    environment:
+       MYSOL ROOT_ PASSWORD: wordpress 
+       MYSOL DATABASE: wordpress
+       MYSOL USER: wordpress
+       MYSQL_PASSWORD: wordpress Pull up for p
+    volumes:
+      -mysql-data:/var/lib/my
+    networks:
+     - my_net
+ volumes:
+      mysql-data:
+networks:
+      My_net
+
+Services file: docker-compose. ym1
+Bring up: docker-compose up -d       (docker-compose -d -f docker-compose-dev.yaml up)
+Bring down: docker-compose down
+Process state: docker-compose ps
+Docker compose down do not delete the volumes
+
+In docker                                        In kubernetes
+CMD [“localhost’]   —>                     args [“localhost”].         args[“HOSTNAME” , “KUBERNETESPORT”]
+ENTRYPOINT [“/bin/ping’]    ——>       command [“/bin/curl’].  command[“printing”]
+
+Environmental variables;
+env:
+  -name: DB_NAME
+    Value: “postrgreess”
+
+env:
+  -name: DB_NAME. (Env variable inside container it needs some dynamical value at the run
+    ValueFrom:
+        ConfigMapKeyRef:
+             name: db_detailes (name of the config map)
+             key: db_name. (Env key from config. Map that values is fetched)
+env:
+  -name: DB_NAME. (Env variable inside container it needs some dynamical value at the
+    ValueFrom:
+        secretKeyRef:
+             name: db_secret (name of the config map)
+             key: db_name.
+
+
+
+
+The Ultimate Docker 50 commands
+_________________
+docker run - run a container from an image
+docker pull - pull an image from a registry
+docker push - push an image to a registry
+docker build - build an image from a Dockerfile
+docker ps - list running containers
+docker stop - stop a running container
+docker start - start a stopped container
+docker restart - restart a container
+docker logs - show the logs of a container
+docker exec - execute a command inside a running container
+docker images - list available images
+docker rm - remove a container
+docker rmi - remove an image
+docker inspect - show information about a container
+docker network create - create a network for containers to communicate
+docker network connect - connect a container to a network
+docker network disconnect - disconnect a container from a network
+docker port - show the mapped ports of a container
+docker cp - copy files between a container and the host
+docker commit - create a new image from a container's changes
+docker login - log in to a registry
+docker logout - log out of a registry
+docker tag - tag an image with a new name
+docker export - export the contents of a container as a tar archive
+docker import - create a new image from a tar archive
+docker save - save an image as a tar archive
+docker load - load an image from a tar archive
+docker top - show the processes running inside a container
+docker stats - show resource usage statistics of containers
+docker diff - show the changes made to a container's filesystem
+docker events - show the events generated by Docker
+docker history - show the history of an image
+docker pause - pause a running container
+docker unpause - unpause a paused container
+docker kill - send a signal to a container to stop it abruptly
+docker wait - wait for a container to exit and return its exit code
+docker attach - attach to a running container's console
+docker buildx - build and push multi-platform images
+docker compose - manage multi-container applications with Docker Compose
+docker swarm - create and manage a cluster of Docker nodes
+docker volume create - create a named volume for persistent data storage
+docker volume ls - list available volumes
+docker volume rm - remove a named volume
+docker system prune - remove all unused objects from Docker
+docker system df - show the usage of Docker objects
+docker system events - show the events generated by Docker on the system
+docker system info - show the system-wide information about Docker
+docker system inspect - show detailed information about Docker objects
+docker system logs - show the system logs of Docker
+docker system version - show the version of Docker installed on the system
+docker system df
+
+
+Docker Daemon
+• You can also enable daemon to listen on TCP Port along with Unix socket
+• But anyone with access to the TCP port could browse your Docker containers,
+start new ones, and run actions as root on your system.
+• We need to enable TLS communication between client and Docker Engine to
+secure this communication.
+
+2235 is the port opened..
+
+
+Docker Daemon
+• Edit service file /lib/systemd/system/docker.service to include TCP host,
+reload daemon and restart docker
+
+[Service]
+ExecStart=
+ExecStart=/usr/bin/dockerd -H fd:// -H tcp://0.0.0.0:2375
+
+systemctl daemon-reload && systemctl restart docker
+• On same machine run: curl http://localhost:2375/v1.43/images/json
+• Using -H fd:// in a Docker service file specifies that Docker should
+communicate with the daemon using a file descriptor rather than a network socket
+
+
+Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running? 
+export DOCKER HOST=tcp://54, 89.235.200:2375    (cli configuration)
+
+The default location of the configuration file on Linux is
+a non-default location.
+/etc/docker / daemon. json. Use the
+--config-file flag to specify
+
+
+Docker Daemon
+• You can also provide this host information by removing this from service
+file /lib/systemd/system/docker.service and configuring it in
+/etc/docker/daemon.json file
+[Service]
+ExecStart=
+ExecStart=/usr/bin/dockerd -H fd:// -H tcp://0.0.0.0:2375
+• Add below change in /etc/docker/daemon. json file
+"hosts": ["unix:///var/run/docker.sock", "tcp://0.0.0.0:2375"]
+On same machine run: curl http://localhost: 2375/v1.43/images/json
+
+Other approach 
+ docker  engine on host machine and docker cli is in the container  we need to mount unix://var/run/docker.sock to container using volume concepts.
+
+Enable
+
+public key & private key
+CSR (public key) → CA (own CA, CRI (self signed), Private key)
+CRT (pem) , private key
+• PKI
+
+• A docker image is a read-only template for
+creating containers.
+• Changes made to the file system inside the
+running container won't be directly saved on to
+the image.
+• Instead , if a container needs to change a file
+from the read-only image that provides its
+filesystem, it copies the file up to its own
+private read-write layer before making the
+change.
+• This is called copy-on-write (COW) mechanism.
+• These new or modified files and directories are
+committed as a new layer.
+• docker history command shows all these layers.
+
+• Two types of volume mounts: Named (docker volumes) and Bind
+
+docker volume create nginx_backup
+/var/lib/docker/volumes/nginx backup/ data/ (in this location volume is created)
+
+/var/lib/docker/ - Home directory of Docker
+Docker volume ls
+Docker volume inspect nginx_backup
+
+
+docker run -d --name web -p 80:80 -v nginx_backup:/usr/share/nginx/html nginx:latest
+docker run -d --name web -p 80:80 -v nginx-data:/usr/share/nginx/html nginx
+docker run -d --name web -p 80:80 --mount src=nginx-data, target=/usr/share/nginx/html nginx
+Named volume — volume creation using docker command
+Bind volumes—> creating folder in any location in host machine and mount to the container
+Bird volumes alowsy give th fulll path or else it will be consider as named volume and docker will create a new column
+
+docker run -d -p 80:80 -- name web -v mybackup:/usr/share/nainx/html:ro nginx:latest. (If any new file created inside container its will be not visible in mybackups volume
+
+
+Which volume type is preferred?
+• Named Volumes are the preferred mechanism for persisting data generated by
+and used by Docker containers.
+• While bind mounts are dependent on the directory structure and OS of the
+host machine, lifecycle of named volumes are completely managed by Docker.
+• Volumes have several advantages over bind mounts:
+1. Volumes are easier to back up or migrate than bind mounts.
+2.You can manage volumes using Docker CLI commands or the Docker API.
+3. Volumes work on both Linux and Windows containers.
+4. Volumes can be more safely shared among multiple containers.
+5. New volumes can have their content pre-populated by a container.
+6. Volumes on Docker Desktop have much higher performance than bind
+mounts from Mac and Windows hosts.
+
+Shared volumes: 
+docker run --name j1 -p 8080:8080 -p 50000:50000 --restart=on-failure -v jenkins home: /var/jenkins/home   jenkins/jenkins:lts-jdk17
+docker run --name j2 -p 8080:8080 -p 50000:50000 --restart=on-failure -v jenkins home: /var/jenkins/home   jenkins/jenkins:lts-jdk17
+
+
+Environment Variables
+Two fundamental components of any computer programming language are variables and
+constants
+Variables and constants both represent unique memory locations containing data the
+program uses in its calculations.
+The difference between the two is that variables values may change during execution,
+while constant values cannot be reassigned.
+• An environment variable is a variable whose value is set outside the program,
+typically through functionality built into the operating system or microservice.
+• An environment variable is made up of a name/value pair, and any number may be
+created and available for reference at a point in time.
+• Use cases for environment variables:
+• Execution mode (e.g., production, development, staging, etc.)
+• Domain names
+• DB Usernames
+• API URL/URI'S
+• Public and private authentication keys (only secure in server applications)
+
+Networking Overview
+• Container networking refers to the ability for containers to connect
+to and communicate with each other, or to non-Docker workloads.
+• Containers have networking enabled by default, and they can make
+outgoing connections.
+• A container has no infor whether their peers are also Docker workloads or not.
+• A container only sees a netwmation about what kind of network it's
+attached to, orork interface with an IP address, a
+gateway, a routing table, DNS services, and other networking details.
+That is, unless the container uses the none network driver.
+
+
+Bridge Network
+A network bridge joins two separate computer networks
+It enables communication between the two networks and provides a way for
+them to work as a single network
+
+10.0.0.0/8. Wkt ipv4 represents by 32bit total in which each octate is represent by 8 bit
+8bit  bit are assigned to network
+Other 24 bits are hostame (2power24)
+
+• A bridge works at the Data link layer
+(Layer 2) of the OSI model
+• It inspects incoming traffic and
+decide whether to forward it or filter
+it
+• Each incoming Ethernet frame is
+inspected for destination MAC address.
+If the bridge determines that the
+destination host is on another segment
+of the network, it forwards the frame
+to that segment.
+
+Bridge Network
+• Docker uses a software bridge which allows containers connected to the
+same bridge network to communicate, while providing isolation from
+containers which are not connected to that bridge network.
+• The Docker bridge driver automatically installs rules in the host machine
+so that containers on different bridge networks cannot communicate
+directly with each other.
+• Bridge networks apply to containers running on the same Docker daemon
+host. For communication among containers running on different Docker
+daemon hosts, you can either manage routing at the oS level, or you can
+use an overlay network.
+• When you start Docker, a default bridge network (also called dockerO) is
+created automatically, and newly-started containers connect to it unless
+otherwice cnecified.
+
+
+• For every new container, Docker
+creates a pair of peer interfaces:
+one local etho interface and one
+unique name (e.g.: vethAQI2QT), out
+in the namespace of the host machine
+• This pair is called Virtual Ethernet
+Pair(veth pair).
+• Traffic going outside is NATted
+
+
+NAT in Networking
+• To access the Internet, one public IP address is needed.
+• But how do private IP address in our private network access Internet?
+• NAT allows multiple devices to access the Internet through a single
+public address. Network Address Translation (NAT) is a process in which
+one or more local IP address is translated into one or more Global IP
+address and vice versa to provide Internet access to the local hosts.
+
+Network Drivers
+• The following network drivers are available by default, and provide core
+networking functionality:
+1. Bridge: The default network driver.
+2. Host: Containers will not have any IP address they will be directly
+created in the system network which will remove isolation between the
+docker host and containers.
+3. None: IP addresses won't be assigned to containers. These containments
+are not accessible to us from the outside or from any other container.
+4. Overlay: Overlay network will enable the connection between multiple
+Docker demons and make different Docker swarm services communicate with
+each other.
+
+
+• The following network drivers are available by default, and provide core
+networking functionality:
+5. Ipvlan: IPvlan networks provide full control over both IPv4 and IPv6
+addressing.
+6. Macvlan: Assign a MAC address to a container.
+
+Resolution of container name to ip address is not possible in default  bridge network.
+• In Bridge network, all containers get private
+internal IPs in the range 172.17.x.x and they
+are isolated from host.
+The Docker daemon has its own DHCP server which
+oversees assigning the IPs from the subnet
+range. Each network also has a default subnet
+mask and gateway.
+• Docker automatically creates a subnet and
+gateway for the bridge network, and docker
+automatically adds new containers to this
+network.
+• Containers on the default bridge network can
+only access each other by IP addresses, unless
+you use the --link option, which is considered
+legacy.
+
+Docker does not support automatic service
+discovery on bridge.
+• You can also create user-defined custom
+bridge network.
+• User-defined bridge networks are superior
+to the default bridge network and
+containers can resolve each other by name
+(DNS) •
+• You can create multiple networks with
+Docker and add containers to one or more
+networks.
+Containers can communicate within networks
+
+--links
+docker container run -d --name web2 nginx:alpine
+docker container run -d --name webl --linki. web2:websecond nginx:alpine
+docker exec -it webl bash
+root@fd4ec3dc07b3:/# ping web2 ping  websecond
+
+
+Custom Bridge Network
+docker network create my_net
+• Notice how the docker bridge now hasaws s3 cp s3://pmd-neo4j-backup-dev/neo4j-main-backup/dev/neo4j-backup.tar.gz .
+an interface connected using brctl show
+• This interface connects the dockero
+bridge to the new container just
+created
+
+docker run -d --name todo --network my net nginx:alpine
+
+
+docker network create --driver bridge ‹ network_name>
+brctl show
+docker network create --driver bridge --subnet 182.18.0.1/24 --gateway 182.18.0.100
+‹network
+_name>
+docker network ls
+docker network inspect ‹ network_name>
+docker container inspect --format '{{ NetworkSettings. IPAddress}}' ‹container_name>
+docker run -d --name new_nginx --network < network_name> nginx
+docker network connect ‹ network_name> ‹ container_name>
+docker network disconnect ‹ network_name> ‹ container_name>
+
+Service Discovery
+• The containers can reach each other using their names because of an Embedded
+DNS which runs on the address 127.0.0.11
+
+docker run -d --name c1 --network host nginx
+
+Host Network
+• In host network, all containers directly get
+connected to host.
+• No network isolation like bridge.
+• Container IP is same as Host IP.
+• Multiple containers cannot run on same hosts with
+same port because of port conflicts on host side.
+• We can't map ports as we did in bridge network
+with -p 80:80. Published ports are discarded.
+• The host networking driver only works on Linux
+hosts, and is not supported on Docker Desktop for
+Mac, Docker Desktop for Windows, or Docker EE for
+Windows Server
+docker run -d --name web --net host nginx
+
+
+None Network
+• In none network, containers will only have a local
+loopback interface i.e., no external networking
+interface.
+• This network driver puts these containers in total
+isolation.
+• Used when you want to disable the networking
+functionality for a specific container.
+docker run -d --name web --net none nginx
+
+Overlay Network
+• Bridge networks apply to containers running on the same Docker daemon host.
+• For communication among containers running on different Docker daemon hosts,
+we should use an overlay network which spans across the entire cluster
+
+DNS Resolution in Bridge Network
+When containers are run in default
+bridge network, they cannot find each
+other using their container names.
+Communication happens only through IP
+Addresses.
+Simply put,
+DNS resolution through
+container names will not work under
+default bridge network.
+
+docker run -d --name mysql -p 3306:3306 \
+-e MYSQL_ROOT_PASSWORD=my_secret -e MYSQL_DATABASE=test \
+mysql:latest
+
+
+docker run --rm --name db-connector \
+-e DB_HOST=172.17.0.2 -e DB_USER=root \
+-e DB_PASSWORD=my_secret -e DATABASE=test \
+kunchalavikram/db-connector:1.0
+
+Load Balancer
+• Load balancing is the process of distributing network traffic
+across a group of backend servers, also known as a server farm or
+server pool.
+• This ensures no single server bears too much demand/load.
+• By spreading the load evenly, load balancing improves application
+responsiveness.
+• It also increases availability of applications and websites for
+users.
+• Modern applications cannot run without load balancers.
+
+To meet such high-traffic and volumes
+of requests, we generally require to
+adding more servers.
+
+• If a single server goes down, the
+load balancer redirects traffic to
+the remaining online servers.
+• When a new server is added to the
+server group, the load balancer
+automatically starts to send
+requests to it.
+
+
+Load Balancer Uses
+1. Distributes client requests or network load efficiently across multiple
+servers
+2. Ensures high availability and reliability by sending requests only to
+servers that are online
+Provides the flexibility to add or subtract servers as demand dictates
+4. Health checks to detect unhealthy instances
+5. Reduced downtime of your application
+6. Seamless Autoscalin® (Auto Scaling Group in AWS)
+7. Outage protection
+8. Improve load times
+9. Reduce server load
+10. TLS termination
+
+Hardware vs software load balancing
+• Load balancers typically come in two flavors: hardware-based and
+software-based.
+• Vendors of hardware-based solutions load proprietary software onto the
+machine they provide, which often uses specialized processors. They are
+deployed in on-premises data centers and the number of load balancers
+depends on the expected amount of peak traffic. Ex: F5 BIG-IP, Cisco ACE
+• Software LB solutions generally run on hardware, making them less expensive
+and more flexible. You can install the software on the hardware of your
+choice or in cloud environments like AWS EC2. Ex: Nginx, HAProxy
+
+• Cloud Load Balancing is a fully distributed, software-defined managed service.
+It isn't hardware-based, so you don't need to manage a physical load balancing
+infrastructure.
+• AWS offers three types of load balancers(ELB), adapted for various scenarios:
+Application Load Balancer(Layer 7), Network Load Balancer(Layer 4), Classic
+Load Balancer(Older Layer 4/7), Gateway Load Balancers(for deploying third-
+party virtual appliances, such as firewalls).
+
+• Round Robin - Requests are distributed in a circular sequence to each
+server in turn, regardless of the server's load or response time.
+• Least Connections - Requests are sent to the backend server with the least
+number of requests.
+• Least Response Time - Routes requests to the server with the lowest
+response time or latency.
+• Random - Requests are randomly assigned to servers.
+• IP Hash - Uses a hash function based on the client's IP address to
+determine which server receives the request. This ensures that requests
+from the same client always go to the same server.
+
+Proxy Servers
+Proxies are intermediaries between a user and a web server.
+• Both proxy servers and load balancer are key components of the client-server
+architecture.
+Depending upon the location of the proxy server; user end or server end, it
+is called Forward or Reverse Proxy
+
+Reverse Proxy Server
+• A Reverse Proxy acts as a server for the users.
+• Each request made by a user is directed towards a reverse proxy,
+thereby acting as an interface for all the servers in the back
+end.
+• It receives initial HTTP connection requests, acting like the
+actual endpoint.
+
+Advantage of reverse proxy
+• A Reverse Proxy hides the topological design of the servers in the
+background.
+• Also act as a Cache, which should mean reduced load on the back-
+end servers.
+• Makes it easy to log and audit all the requests.
+• Anonymity and security. Since reverse proxies intercept all the
+incoming requests, they serve as an additional level of
+protection for backend servers. It helps prevent any malicious
+actors from abusing web servers by blocking suspicious traffic
+from specific IP addresses.
+Load balancing. Essentially
+Load Balancer is one of the
+applications of a Reverse
+ProXy
+
+Forward Proxy Server
+• A Forward Proxy sits in front of a user and acts as a mediator
+between users and the web servers they access.
+• The user's request goes through the forward proxy first and then
+reaches the web page. Once the data from the server is retrieved,
+it is sent to the proxy server, redirecting it back to the
+requester.
+
+Forward Proxy Server
+Advantages
+• Block employees/students from visiting certain websites
+• Monitor employee online activity
+• Block malicious traffic from reaching an origin server
+• Improve the user experience by caching external site content
+
+Nginx as Reverse Proxy
+docker run -d --name hello1 --net my_net tutum/hello-world
+docker run -d --name hello2 --net my_net tutum/hello-world
+docker run -d --name hello3 --net my_net tutum/hello-world
+
+docker run -d --net my_net --name reverse-proxy \
+-V $PWD/default.conf:/etc/nginx/conf.d/default.conf:ro Adtual
+-p 80:80 nginx
+
+
+upstream backends {
+    server hello1:80;
+    server hello2:80;
+    server hello3:80;
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name localhost;
+
+    location / {
+        proxy_pass http://backends;
+    }
+}
+
+
+
+DNS Round Robin
+www.example.com)
+is associated with multiple IP by configuring
+• When a client device initiates a DNS query to resolve the domain name, the DNS server
+returns a list of IP addresses associated with that domain(rotated with each query).
+
+docker run -d --net mynet --name c1
+kunchalavikram/hello-flask:v1
+--net-alias web
+docker run -d --net mynet --name c2 --net-alias web
+kunchalavikram/hello-flask:v1
+docker run -d --net mynet --name c3
+kunchalavikram/hello-flask:v1
+--net-alias web
+docker run --rm --net mynet curlimages/curl -s web:5000
+
+Building Images
+• Hosting a static website was easier as base image nginx has all
+dependencies to host
+• What if we are required to host an application which requires lot of
+dependencies which base image do not provide? We build the image!!!
+
+Let's say a flask application must be containerized
+docker run -it --name my-app ubuntu bash
+root@beb164a51e6a: /#
+apt update
+root@beb164a51e6a:/#
+apt install python
+root@beb164a51e6a:/#
+pip install flask
+root@beb164a51e6a:/#
+exit
+docker commit my-app
+my-flask-app:1.0
+
+Dockerfile
+• Dockerfile is essentially the build instructions to build your own
+docker image
+• It is a text document that contains all commands to assemble the image
+• Name of the docker file is Dockerfile without any extensions. Although
+we can use any naming convention
+• A Docker image typically consists of:
+1. A base Docker image on top of which we build our own Docker image
+2. A set of tools and applications to be installed in the new Docker image
+3. A set of files to be copied into the Docker image (e g configuration
+files, application binaries)
+4. Environment variables, health check commands etc
+
+Initialize a project with the files necessary to run the project in a container.
+Docker Desktop 4.18 and later provides the Docker Init plugin with the docker init CLI
+command.
+
+• FROM defines the base image used to start the build process
+MAINTAINER/LABEL defines a full name and email address of the image creator
+COPY copies one or more files from the Docker host into the Docker image
+RUN runs commands while image is being built from the Dockerfile and saves result as
+a new layer
+• ARG to supply arguments while building to the image
+• ENV to supply environment variables to the image
+• EXPOSE exposes a specific port to enable networking between the container and the
+outside world
+VOLUME is used to enable access from the container to a directory on the host machine
+• WORKDIR used to set default working directory for the container. Like cd in the
+container
+• CMD command that runs when the container starts
+• ENTRYPOINT command that runs when the container starts
+HEALTHCHECK to determine the health of a container/application. Queries the health
+endpoint
+ONBUILD is an instruction that the parent Dockerfile gives to the child Do‹
+
+Build Context
+• The docker build command builds an image from a Dockerfile
+using a context, which are a set of files/directories at a
+specified location PATH
+These files and folders are the Docker build context
+• The build is run by the Docker daemon, not by the CLI
+• The first thing a build process does is send the entire
+context(current working directory contents) recursively to
+the daemon as Tarball
+
+In most cases, it's best to start with an empty directory as
+context and keep your Dockerfile in that directory. Add only
+the files needed for building the Dockerfile
+• Do not use your root directory, I, as the PATH for your
+build context, as it causes the build to transfer the entire
+contents of your hard drive to the Docker daemon
+• To increase the build's performance, exclude files and
+directories by adding a dockerignore file to the context
+directory
+
+Parser Directives
+• Parser directives are optional and affect the way in which subsequent lines in a
+Dockerfile are handled.
+Parser directives don't add layers to the build, and don't show up as build steps.
+• Parser directives are written as a special type of comment in the form #directive=value.
+• Use the syntax parser directive to declare the Dockerfile syntax version to use for the
+build.
+If unspecified, Buildkit uses a bundled version of the Dockerfile frontend.
+Setting syntax parser directive to docker/dockerfile:1, causes Buildkit to pull the
+latest stable version of the Dockerfile syntax before the build.
+
+docker build --no-cache -t test:1.0 -f Dockerfile --build-arg TAG=3.11.7-slim-bullseye .
+
+docker run -e MY_VAR=5 <image_name>
+docker build --build-arg buildtime_variable=DevopMaceFasy1.ue -t <image_name> .
+
+
+• EXPOSE instruction functions as a type of documentation between the person
+who builds the image and the person who runs the container, about which ports
+are intended to be published.
+It does not actually publish the port.
+You can specify whether the port listens on TCP or UDP, and the default is
+TCP if the protocol is not specified.
+To publish the port when running the container, use the -p flag on docker run
+to publish
+# Port information for documentation
+EXPOSE 8081/tcp
+EXPOSE 80/udp
+docker run - 80:8081/tco - 80:80/udd ...
+
+VOLUME
+• VOLUME instruction creates a directory inside the Docker image which you can
+later mount a volume (directory) to from the Docker host
+• In other words, you can create a directory inside the docker image, eg.
+called /app
+
+
+CMD
+• CMD command is used to give the default commands to be run when starting the
+container
+• It doesn't execute during image build stage like RUN
+• There can only be one CMD instruction in a Dockerfile. If you list more than
+one CMD then only the last CMD will take effect
+These commands run only when there is no argument specified while running the
+container
+• You can check the default CMD of an image by docker image inspect
+• Has 3 forms
+• CMD ["executable", "param1", "param2"] (exec form, this is the preferred
+form)
+• CMD ["param1", "param2"] (as default parameters to ENTRYPOINT)
+• CMD command parami param2 (shell form)
+
+
+CMD sleep 5
+CMD ["/bin/sleep", "5"] --> executable
+CMD [python", "main.py"]
+CMD ping localhost
+CMD ["/bin/ping", "localhost"]
+CMD ["java", "-jar", "app.jar"]
+RUN & CMD/EP
+
+ENTRYPOINT
+• ENTRYPOINT is also used to give the default commands to be run when starting
+the container. It works similarly to CMD
+• Both CMD and ENTRYPOINT can be overridden when starting the docker container
+• It will be the last instruction of the Dockerfile
+• ENTRYPOINT kind of makes your Docker image an executable command itself,
+which can be started up and which shut down automatically when finished
+• Has 2 forms
+• ENTRYPOINT ["executable", "param1", "param2"] (exec form, this is the
+preferred form)
+• ENTRYPOINT command parami param2 (shell form)
+
+Shell form vs Executable form
+• When using the shell form, the specified binary/command is executed with an
+invocation of the shell using /bin/sh -c
+• You can see this clearly if you run a container and then look at the docker
+ps output
+
+1. /bin/sh won't forward any POSIX signals to child processes. So, bash/sh
+cannot be PID 1.
+2. Not all docker images has shell binary inside it. So, shell form commands
+cannot be executed, and hence the container fails.
+3. Executable forms in Dockerfiles offer better clarity, consistency, signal
+handling, caching, and security, making them a preferred choice.
+
+# Use Python 3.8.13 slim image as base
+FROM python:3.8.13-slim
+
+# Set working directory inside the container
+WORKDIR /app
+
+# Copy requirements file
+COPY requirements.txt .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Expose port 5000
+EXPOSE 5000
+
+# Health check for the container
+HEALTHCHECK --interval=1m --timeout=30s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:5000/health || exit 1
+
+# Default command to run the application
+CMD ["python", "app.py"]
+
+USER
+•
+•
+The USER instruction sets the username (or UID) and optionally the user group (or GID) to
+use as the default user and group for the remainder of the current stage.
+The specified user is used for RUN instructions and
+at runtime, runs the relevant
+ENTRYPOINT and CMD
+commands.
+
+
+Docker Build Architecture
+• Docker Build is one of Docker Engine's most used features.
+• Whenever you are creating an image, you are using Docker Build.
+• Build allows you to package and bundle your code and ship it anywhere.
+• Docker Build is more than a command for building images, and it's not only about
+packaging your code.
+• Docker Build implements a client-server architecture, where Build is the client and
+the user interface for running and managing builds and Buildkit is the server, or
+builder, that handles the build execution.
+
+Buildx
+• Buildx is a CLI tool that provides a user interface for working with builds.
+• It is a replacement for the legacy build client used in earlier versions of Docker
+Engine and Docker Desktop.
+• In newer versions of Docker Desktop and Docker Engine, you're using Build by default
+when you invoke the docker build command.
+• In earlier versions, to build using Buildx you would use the docker build build
+command.
+• Buildx is more than just an updated build command. It also contains utilities for
+creating and managing builders.
+• Docker Buildx is installed by default with Docker Desktop.
+• Docker Engine version 23.0 and later requires that you install Build from a seamatay
+package. Buildx is included in the Docker Engine installation instructions.
+Subscribe
+
+• BuildKit, or buildkitd, is the daemon process that executes the build workloads.
+• It is the default builder for users on Docker Desktop, and Docker Engine as of
+version 23.0. It is an improved backend to replace the legacy builder.
+• A build execution starts with the invocation of a docker build command. Buildx
+interprets your build command and sends a build equest to the Buildkit backend.
+• If the build requires resources from the client, such as local files or build
+secrets, BuildKit requests the resources that it needs from Buildx.
+• This is one way in which Buildkit is more efficient compared to the legacy builder it
+replaces.
+• BuildKit only requests the resources that the build needs, when they're needed. The
+legacy builder, in comparison, always takes a copy of the
+local filesystem.
+
+
+• BuildKit provides new functionality and improves your builds' performance. It also
+introduces support for handling more complex scenarios:
+1. Detect and skip executing unused build stages
+2. Parallelize building independent build stages
+3. Incrementally transfer only the changed files in your build context between builds
+4. Detect and skip transferring unused files in your build context
+
+• A builder is a BuildKit daemon that you can use to run your builds.
+• BuildKit is the build engine that solves the build steps in a Dockerfile
+to produce a container image or other artifacts.
+• You can create and manage builders, inspect them, and even connect to
+builders running remotely (docker build cloud). You interact with builders
+using the Docker CLI.
+• Docker Engine automatically creates a builder that becomes the default
+backend for your builds.
+• This builder uses the BuildKit library bundled with the daemon.
+
+
+
+Build Drivers
+Buildx implements a concept of build drivers(where BuildKit backend runs) to refer to
+different builder configurations.
+• The default builder created by the daemon uses the docker driver which is simple as
+easy to use but has limited support for advanced features like caching and output
+formats and isn't configurable.
+• Other drivers provide more flexibility and are better at handling advanced scenarios.
+• The following are the drivers available
+• docker: uses the BuildKit library bundled into the Docker daemon.
+• docker-container: creates a dedicated BuildKit container using Docker.
+• kubernetes: creates BuildKit pods in a Kubernetes cluster.
+• remote: connects directly to a manually managed BuildKit daemon.
+
+Available Builders
+• Use the docker build ls command to see the available builder instances.
+• You can use the optional --builder flag, or the BUILDX_BUILDER environment
+variable, to specify a builder by name
+
+
+Manage Builders
+• The default builder uses the docker driver. You can't manually create new docker
+builders, but you can create builders that use other drivers.
+docker buildx create --name=<builder-name>v
+Build uses the docker-container driver by default if you omit the --driver flag.
+Some commands:
+List builders: docker build ls
+Inspect a builder: docker buildx inspect --bootstrap ‹ builder-name> (--bootstrap starts the builder)
+Check disk usage: docker buildx du --builder ‹ builder-name>
+
+docker build --builder test -t mytest:1.0
+docker build create --name test
+
+docker build inspect --bootstrap test
+
+Docker Build Cloud
+Introduction
+• Docker Build Cloud is a service facilitating faster container image
+building locally and in CI.
+• Utilizes cloud infrastructure optimized for workloads without manual
+configuration.
+• Implements a remote build cache for fast builds across team members.
+• Invocation is similar to a regular build using docker build build.
+
+• Build execution shifts from a local BuildKit to a secure, remote BuildKit
+instance in the cloud.
+• Resulting build output is transmitted securely to specified destinations,
+such as local Docker Engine image store or an image registry.
+• Offers improved build speed, shared build cache, and supports native multi-
+platform builds.
+• The builder has native support for the linux/amd64 and linux/arm64
+architectures.
+• This gives you a high-performance build cluster for building multi-platform
+images natively.
+
+Create Local Environment
+Before you can start using Docker Build Cloud, you must add the builder to your local
+environment.
+• Have Docker Desktop version 4.26.0 or later.
+
+Loading Build Results
+Building with --tag loads the build result to the local image store automatically
+when the build finishes. --push will push the images to the registry.
+docker buildx build --builder cloud-<ORG>-< BUILDER_NAME> \
+-- tag < IMAGE>\
+-- push
+
+docker buildx build --builder cloud-kunchalavikram-remote-docker-builder --tag kunchalavikram/myubuntu:1.6 •
+
+
+Reuse Cache
+When you run a build, the builder attempts to reuse layers from earlier builds.
+If a layer of an image is unchanged, then the builder picks it up from the build cache.
+If a layer has changed since the last build, that layer, and all layers that follow, must
+be rebuilt.
+
+
+Cache Storage Backends
+• To ensure fast builds, BuildKit automatically caches the build result in
+its own internal cache.
+• Additionally, Buildkit also supports exporting build cache to an external
+location, making it possible to import in future builds.
+• An external cache becomes almost essential in CI/CD build environments as
+they have little-to-no persistence between runs, but it's still important
+to keep the runtime of image builds as low as possible.
+
+
+Cache Storage Backends
+• To ensure fast builds, BuildKit automatically caches the build result in
+its own internal cache.
+• Additionally, BuildKit also supports exporting build cache to an external
+location, making it possible to import in future builds.
+• An external cache becomes almost essential in CI/CD build environments as
+they have little-to-no persistence between runs, but it's still important
+to keep the runtime of image builds as low as possible.
+
+• Buildx supports the following cache storage backends:
+1. local: writes the build cache to a local directory on the filesystem.
+2. inline: embeds the build cache into the image. The inline cache gets
+pushed to the same location as the main output result. This only works
+with the image exporter.
+3. registry: embeds the build cache into a separate image, and pushes to a
+dedicated location separate from the main output.
+4. gha: uploads the build cache to GitHub Actions cache (beta) .
+5. s3: uploads the build cache to an AWS S3 bucket (unreleased).
+6. azblob: uploads the build cache to Azure Blob Storage (unreleased).
+
+S3 Cache Backends
+• This is an experimental feature. The interface and behavior are unstable
+and may change in future releases.
+• The s3 cache storage uploads your resulting build cache to Amazon S3 file
+storage service of other 53-compatible services, such as Minio. .
+• This cache storage backend is not supported with the default docker
+driver. To use this feature, create a new builder of docker-container
+driver.
+
+S3 cache backends
+docker buildx build --push -t kunchalavikram/test:1.0 \
+--cache-to type=s3, region=us-east-1, bucket=docker-s3-cache-backend, name=mycache \
+--cache-from type=s3, region=us-east-1, bucket=docker-s3-cache-backend, name=mycache
+
+
+
+Dockerfile
+Best Practices
+• USE OFFICIAL IMAGES: Base your image on official, vetted Docker images.
+• PIN VERSION: Always pin an explicit version of the base image.
+• USE DISTROLESS IMAGES: Don't pack unnecessary binaries in the image.
+• MULTI-STAGE BUILDS: Utilize multi-stage builds to keep your images small and secure.
+• USE COPY OVER ADD: Prefer COPY over ADD unless you need tar and remote URL handling.
+• PARAMETERIZE: Use ARG for parameters that need to change between builds.
+• SET WORKDIR: Set the working directory with WORKDIR before COPY and RUN.
+• USE CACHE: Don't neglect Docker's build cache; structure Dockerfile instructions to
+maximize layer reuse.
+• MINIMAL CONTEXTS: Don't send large build contexts to the Docker daemon. (Keep only
+necessary files in the build directory). Use dockerignore to exclude files not releyFu
+to the build.
+
+• MINIMIZE LAYERS: Combine RUN instructions to reduce image layers. (example: RUN
+apt-get update 2d apt-get install -y ‹package>). Do not install unnecessary
+packages.
+• CLEAN UP CACHE: Remove unnecessary cache and temporary files to minimize image
+size. (example: RUN apt-get clean && rm -rf /var/cache/apt/*).
+• AVOID HARDCODED CREDENTIALS: Never put secrets or passwords in the Dockerfile. Use
+Environment Variables to set the actual value outside the Dockerfile.
+• USE NON-ROOT USER: Do not grant the container full root access. (Use USER
+nonrootuser after any necessary installation commands) .
+• SPECIFY PORTS: Don't leave ports unspecified if they are required. (example: EXPOSE
+5000).
+• USE ENTRYPOINT: Use ENTRYPOINT to set the default process (example: ENTRYPOINT
+["/bin/bash"]) .
+
+
+
+Export Binaries
+
+Sometimes, you don't want to package and distribute your application as a Docker
+image.
+• In that case, use Docker to build your application to standalone binaries.
+• Use Docker to build your application and use exporters to save the output to disk.
+• The default output format for docker build is a container image. That image is
+automatically loaded to your local image store, where you can run a container from
+that image, or push it to a registry. Under the hood, this uses the default exporter,
+called the docker exporter.
+• To export your build results as files instead, you can use the local exporter.
+• The local exporter saves the filesystem of the build container to the specified
+directory on the host machine.
+
+Multi-platform Images
+Multi-platform images are container images that are designed to run on multiple
+architectures or platforms seamlessly.
+Docker introduced support for multi-platform images to address the growing need for
+building and distributing images that can be deployed on different CPU architectures,
+such as x86_64, ARM, and others.
+Apple's recent move to an ARM architecture with the M1 chips in their new products
+has necessitated revisiting some of the Docker images to support the architecture in
+addition to the current Intel architecture.
+
+AWS Graviton processors
+are custom ARM based
+processors built by Amazon
+Web Services to deliver
+the best price performance
+for your cloud workloads
+running in Amazon EC2.
+Full screen (f)
+
+Multi-platform Images
+• Most of the Docker Official Images on Docker Hub
+provide a variety of architectures.
+• For example, the busybox image supports amd64,
+arm32v5, arm32v6, arm32v7, arm64v8, 1386, ppc64le,
+and s390x.
+• When you run an image with multi-platform support,
+Docker automatically selects the image that
+matches your 0S and architecture.
+• When running the image on an amd64 machine, the
+amd64 variant is pulled and run.
+docker pull busybox
+docker pull --platform=linux/arm64 busybox
+
+By default, you can only build for a single platform at a time and push.
+
+# Specify a build argument for architecture
+ARG ARCH=linux/arm64
+
+# Use the specified architecture for the base image
+FROM --platform=${ARCH} python:alpine3.9
+
+# Install Flask
+RUN pip install --no-cache-dir flask
+
+# Set the working directory
+WORKDIR /app
+
+# Copy application code
+COPY . .
+
+# Expose port 5000
+EXPOSE 5000
+
+# Define the default command to run the application
+CMD ["python", "/app/main.py"]
+
+• If the host's architecture differs from that of the Docker image, — it throws error
+
+• As we can see in the diagram, the host machine has x86/amd64 CPU architecture, and on top
+of that, we install operating systems which can be Windows or Linux.
+• Windows requires WSL or Linuxkit to run Docker. It uses QEMU to emulate multiple CPU
+architectures and Dockerfile builds run inside this emulation.
+
+• QEMU (Quick EMUlator) is an open-
+source emulator and virtualization
+tool that allows the emulation of
+various architectures, including
+different CPU types and system
+architectures.
+• It is often used to run software on
+a platform different from the host
+machine's architecture.
+
+• There are two ways to use Docker to build a multiarch images:
+1. Using docker manifest
+2. Using docker buildx
+
+
+
+docket manifesta greate kunchalavikram/multiarch:v1
+Docker manifest push
+
+
+
+Multi-platform Images Using Buildx
+Create a Builder
+docker build create --name container --driver=docker-container
+Build and Push
+docker buildx build --push --builder=container \
+--platform linux/amd64, linux/arm64 \
+-t kunchalavikram/multiarch: latest *
+Inspect the image
+docker inspect kunchalavikram/multiarch:latest
+
+
+| Container Security
+Why Container Security?
+• Containers offer several benefits, such as
+portability, scalability, and efficiency, but they
+also introduce unique security challenges.
+• With the increased usage of Docker, it has become
+paramount to safeguard Docker containers against
+security threats, especially with the widespread
+adoption of containerization technologies like Docker
+and Kubernetes.
+• By utilizing the Docker vulnerability scanners, you
+can identify and address potential threats before
+they become critical issues.
+
+Container images are often built from layers
+of other container images and software
+packages.
+• These layers and packages can contain
+vulnerabilities that make your containers and
+the applications they run vulnerable to
+attack.
+Generally, using smaller container images
+comes with a lesser number of libraries
+inside. This reduces the attack surface to
+the container.
+
+Smaller containers, makes them moving much
+easier and faster.
+This improves the performance of the build
+and deployment processes since less container
+image data needs to be pulled to the running
+container cluster.
+In general, smaller containers are also
+efficient in utilizing mostly disk space and
+memory.
+
+• Container images should pack only the
+application code and its dependencies. Rest
+everything to be scrapped off to bring down
+its size including the build dependencies.
+• The smaller the image the lesser 1s the
+attack surtace to the container.
+• Larger images can have more software
+vulnerabilities in the form of vulnerable
+dependencies including potential security
+holes.
+• Better to use alpine, slim or distroless
+images and employ multistage builds.
+
+Choosing the correct base image
+• Docker Hub hosts million of repositories
+Not all images are secure
+Some of the images can be malicious,
+created
+by following poor practices and thus leading
+to vulnerabilities
+• Some images can be old, with unmaintained code
+and packages
+
+Distroless Container Images
+• |
+Pioneered by Google to improve security and container size.
+Distroless Container Images are language focused Docker images, sans the operating
+system distribution.
+• Distroless images only contains your application and its runtime dependencies, not
+other usual OS package managers, Linux shells or any such programs which we usually
+would expect in a standard Linux distribution.
+This approach creates a smaller attack surface, reduces compliance scope, and results
+in a small, lean and clean container images and thus increases security.
+
+Distroless images are very small. The smallest
+distroless image, gcrio/distroless/static-
+debian11, is around 2 MiB. That's about 50% of
+the size of alpine (~5 MiB), and less than 2%
+of the size of debian (124 MiB).
+
+Container Vulnerability Scanning
+Introduction
+• Container vulnerability scanning is a crucial component of container security, aiming
+to identify and mitigate security risks within containerized applications.
+• The process involves scanning container images for known vulnerabilities and ensuring
+that only secure images are deployed in production.
+• They mostly work by scanning installed OS packages and comparing versions to the
+CVE (Common Vulnerabilities and Exposures)database.
+
+CVE is a list of publicly
+disclosed computer security flaws.
+When someone refers to a CVE, they
+mean a security flaw that's been
+assigned a CVE ID number.
+
+• In addition to CVE-based security vulnerability reporting, some scanners can evaluate
+Docker images using custom policies.
+• Organizations can define security policies that specify the acceptable level of risk
+for container images. Vulnerability scanning tools enforce these policies, ensuring
+that images meet the predefined security standards before being deployed in
+production.
+• Policies result in a Pass or Fail outcome.
+• While vulnerability scanning primarily occurs during the build phase, runtime scanning
+is also essential. Runtime scanning tools monitor containers in production,
+identifying and alerting on vulnerabilities that may emerge post-deployment or due to
+configuration changes.
+
+Remediation Workflow
+• Vulnerability scanning tools often include features to help organizations
+remediate identified vulnerabilities.
+• This may involve providing information on available patches, suggesting
+alternative base images, or integrating with orchestration platforms to
+automate the deployment of updated container images.
+
+• Allows developers to detect potential security issues in Docker images
+before they are deployed into production environments.
+• Regular scanning with vulnerability tools ensures that Docker images stay
+up-to-date and free from known vulnerabilities.
+• Helps to align the application with security best practices and compliance
+requirements.
+• Automated scanning processes streamline the assessment of Docker images,
+saving time and effort for development and security teams.
+• Continuous integration with CI/CD pipelines ensures that images are
+continuously scanned as they are built and deployed.
+• Mitigates risks associated with insecure Docker images.
+• Can be integrated with existing security tools and processes, creating a
+seamless security ecosystem.
+
+
+Scan tools
+• Docker Scout
+• Snyk
+• Anchore Engine
+• Clair
+• Aquasecurity Trivy
+• JFrog Xray
+• Twistlock
+• Qualys
+• Cilium
+• Blackdug
+• Sysdig Falco
+• Grype: https: //github.com/anchore/grype
+• Syft: https://github.com/anchore/syft
+Linter: hadolint(https://hadolint.github.io/hadolint/)
+
+
+Secure Docker Images
+• Choosing the right base image
+• Remove Exploitable and Non-Essential Software
+• Use multi-stage builds
+• Scanning images during development
+• Scanning containers during production
+• Vulnerability Management
+
+TRIVY  Introduction
+• Trivy is the most popular open-souice security scanner, reliable, fast, and easy to
+use.
+• It can find vulnerabilities & IaC misconfigurations, SBOM discovery, Cloud scanning,
+Kubernetes security risks, and more
+• Trivy detects vulnerabilities from a wide array of operating systems and programming
+languages, across different versions, and vulnerability sources.
+• It can scan Terraform, CloudFormation, Docker, Kubernetes, and many other IaC
+configuration files for security issues right alongside vulnerabilities.	
+
+• Targets (what Trivy can scan) :
+• Container Image
+• Filesystem
+• Git Repository (remote)
+• Virtual Machine Image
+• Kubernetes
+• AWS
+• Scanners (what Trivy can find there):
+• 0S packages and software dependencies
+in use (SBOM)
+• Known vulnerabilities (CVEs)
+• IaC issues and misconfigurations
+• Sensitive information and secrets
+• Software licenses
+trivy ‹ target> [--scanners ‹ scanner1, scanner2>] ‹ subject»
+
+• Trivy supports two targets for container images:
+• Files inside container images: Vulnerabilities, Misconfigurations (IaC, K8s),
+Secrets, Licenses
+• Container image metadata: Misconfigurations, Secrets
+
+Common commands:
+trivy image python: 3.4-alpine
+trivy image gcr.io/distroless/python3-debian12
+trivy image
+--severity CRITICAL golang:1.16-buster
+trivy image --severity HIGH, CRITICAL gcr.io/distroless/base-debian12
+trivy image --scanners misconfig trivy-test:v1
+trivy image --image-config-scanners secret trivy-test:v2
+trivy image --scanners misconfig --format json --output result. json
+trivy-test: v1
+
+CI Integration
+• Scan your image automatically as part of your CI workflow, failing the workflow if
+a vulnerability is found.
+• When you don't want to fail the test, specify --exit-code O.
